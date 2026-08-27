@@ -12,7 +12,14 @@ export type Restaurant = {
   phone: string;
   defaultLocale: Locale;
   plan: string;
+  isTrial: boolean;
+  trialEndsAt: string | null;
+  suspended: boolean;
+  createdAt: string;
 };
+
+export const RESTAURANT_SELECT =
+  "id, name, slug, logo, currency, phone, default_locale, plan, is_trial, trial_ends_at, suspended, created_at";
 
 export const STATUS_TO_DB: Record<TicketStatus, OrderStatusDb> = {
   new: "pending",
@@ -93,6 +100,10 @@ export function mapRestaurant(row: {
   phone?: string | null;
   default_locale?: string | null;
   plan?: string | null;
+  is_trial?: boolean | null;
+  trial_ends_at?: string | null;
+  suspended?: boolean | null;
+  created_at?: string | null;
 }): Restaurant {
   return {
     id: row.id,
@@ -103,6 +114,10 @@ export function mapRestaurant(row: {
     phone: row.phone ?? "",
     defaultLocale: parseLocale(row.default_locale),
     plan: row.plan || "starter",
+    isTrial: Boolean(row.is_trial),
+    trialEndsAt: row.trial_ends_at ?? null,
+    suspended: Boolean(row.suspended),
+    createdAt: row.created_at ?? "",
   };
 }
 

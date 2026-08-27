@@ -26,6 +26,9 @@ create table if not exists public.restaurants (
   owner_id uuid,
   phone text,
   default_locale text not null default 'fr' check (default_locale in ('ar', 'fr', 'en')),
+  is_trial boolean not null default false,
+  trial_ends_at timestamptz,
+  suspended boolean not null default false,
   created_at timestamptz not null default now()
 );
 

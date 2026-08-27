@@ -6,11 +6,14 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { KitchenBoard } from "@/components/kitchen-board";
 import { KitchenSoundToggle } from "@/components/kitchen-sound-toggle";
+import { TrialBanner, TrialExpired, RestaurantSuspended } from "@/components/admin/trial-banner";
 import { useLocale } from "@/components/locale-provider";
+import { useTrial } from "@/components/use-trial";
 import { isKitchenSoundMuted } from "@/lib/audio";
 
 export function KitchenView() {
   const { t } = useLocale();
+  const { expired, suspended } = useTrial();
   const [armed, setArmed] = useState(false);
   const [muted, setMuted] = useState(false);
 
@@ -45,18 +48,27 @@ export function KitchenView() {
           <ThemeToggle />
         </div>
       </header>
-      {!armed ? (
-        <div className="flex flex-col gap-2 border-b border-accent/25 bg-accent/10 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-          <p className="text-sm text-foreground">{t("kitchen.soundHint")}</p>
-          <KitchenSoundToggle
-            armed={armed}
-            muted={muted}
-            onArmed={setArmed}
-            onMuted={setMuted}
-          />
-        </div>
-      ) : null}
-      <KitchenBoard />
+      <TrialBanner />
+      {suspended ? (
+        <RestaurantSuspended />
+      ) : expired ? (
+        <TrialExpired />
+      ) : (
+        <>
+          {!armed ? (
+            <div className="flex flex-col gap-2 border-b border-accent/25 bg-accent/10 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+              <p className="text-sm text-foreground">{t("kitchen.soundHint")}</p>
+              <KitchenSoundToggle
+                armed={armed}
+                muted={muted}
+                onArmed={setArmed}
+                onMuted={setMuted}
+              />
+            </div>
+          ) : null}
+          <KitchenBoard />
+        </>
+      )}
     </div>
   );
 }

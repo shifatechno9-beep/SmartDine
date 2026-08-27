@@ -24,6 +24,9 @@ export type Database = {
           phone: string | null;
           default_locale: string;
           created_at: string;
+          is_trial: boolean;
+          trial_ends_at: string | null;
+          suspended: boolean;
         };
         Insert: {
           id?: string;
@@ -36,6 +39,9 @@ export type Database = {
           phone?: string | null;
           default_locale?: string;
           created_at?: string;
+          is_trial?: boolean;
+          trial_ends_at?: string | null;
+          suspended?: boolean;
         };
         Update: {
           id?: string;
@@ -48,6 +54,9 @@ export type Database = {
           phone?: string | null;
           default_locale?: string;
           created_at?: string;
+          is_trial?: boolean;
+          trial_ends_at?: string | null;
+          suspended?: boolean;
         };
         Relationships: [];
       };

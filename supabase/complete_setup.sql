@@ -33,6 +33,9 @@ create table if not exists public.restaurants (
   owner_id uuid,
   phone text,
   default_locale text not null default 'fr',
+  is_trial boolean not null default false,
+  trial_ends_at timestamptz,
+  suspended boolean not null default false,
   created_at timestamptz not null default now()
 );
 
@@ -89,6 +92,9 @@ alter table public.restaurants add column if not exists plan text;
 alter table public.restaurants add column if not exists owner_id uuid;
 alter table public.restaurants add column if not exists phone text;
 alter table public.restaurants add column if not exists default_locale text;
+alter table public.restaurants add column if not exists is_trial boolean;
+alter table public.restaurants add column if not exists trial_ends_at timestamptz;
+alter table public.restaurants add column if not exists suspended boolean;
 alter table public.restaurants add column if not exists created_at timestamptz;
 
 alter table public.dishes add column if not exists title_ar text;
@@ -120,6 +126,16 @@ update public.restaurants set currency = 'MAD' where currency is null or btrim(c
 update public.restaurants set plan = 'starter' where plan is null or plan not in ('starter', 'pro', 'enterprise');
 update public.restaurants set default_locale = 'fr' where default_locale is null or default_locale not in ('ar', 'fr', 'en');
 update public.restaurants set created_at = now() where created_at is null;
+update public.restaurants
+set
+  trial_ends_at = coalesce(trial_ends_at, created_at + interval '7 days'),
+  is_trial = true
+where plan = 'starter';
+update public.restaurants
+set is_trial = false
+where plan is distinct from 'starter';
+update public.restaurants set is_trial = false where is_trial is null;
+update public.restaurants set suspended = false where suspended is null;
 
 update public.dishes set title_ar = coalesce(title_ar, '');
 update public.dishes set title_fr = coalesce(title_fr, '');
@@ -141,6 +157,8 @@ update public.reviews set created_at = now() where created_at is null;
 alter table public.restaurants alter column currency set default 'MAD';
 alter table public.restaurants alter column plan set default 'starter';
 alter table public.restaurants alter column default_locale set default 'fr';
+alter table public.restaurants alter column is_trial set default false;
+alter table public.restaurants alter column suspended set default false;
 alter table public.restaurants alter column created_at set default now();
 
 do $$
@@ -148,6 +166,8 @@ begin
   alter table public.restaurants alter column currency set not null;
   alter table public.restaurants alter column plan set not null;
   alter table public.restaurants alter column default_locale set not null;
+  alter table public.restaurants alter column is_trial set not null;
+  alter table public.restaurants alter column suspended set not null;
 exception
   when others then
     raise notice 'restaurants not-null skipped: %', sqlerrm;
@@ -374,6 +394,54 @@ create policy "admins_public_read" on public.restaurant_admins for select using 
 create policy "admins_public_write" on public.restaurant_admins for all using (true) with check (true);
 create policy "reviews_public_read" on public.reviews for select using (true);
 create policy "reviews_public_write" on public.reviews for all using (true) with check (true);
+
+-- Super-admin helper + subscription column lock
+-- Anon/authenticated may still insert restaurants (onboarding) and update profile fields.
+-- Plan / trial / suspended changes go through the service role API only.
+create table if not exists public.super_admins (
+  email text primary key
+);
+
+alter table public.super_admins enable row level security;
+revoke all on table public.super_admins from anon, authenticated;
+
+drop policy if exists "super_admins_no_public" on public.super_admins;
+
+create or replace function public.is_super_admin()
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1
+    from public.super_admins s
+    where lower(s.email) = lower(coalesce(auth.jwt() ->> 'email', ''))
+  );
+$$;
+
+revoke all on function public.is_super_admin() from public;
+grant execute on function public.is_super_admin() to anon, authenticated, service_role;
+
+drop policy if exists "restaurants_super_admin_all" on public.restaurants;
+create policy "restaurants_super_admin_all"
+  on public.restaurants
+  for all
+  using (public.is_super_admin())
+  with check (public.is_super_admin());
+
+do $$
+begin
+  revoke update on table public.restaurants from anon, authenticated;
+  grant update (
+    name, slug, logo, currency, owner_id, phone, default_locale
+  ) on table public.restaurants to anon, authenticated;
+exception
+  when others then
+    raise notice 'restaurant column grants: %', sqlerrm;
+end
+$$;
 
 -- ---------------------------------------------------------------------------
 -- Compatibility views. The app reads public.dishes and orders.items jsonb;

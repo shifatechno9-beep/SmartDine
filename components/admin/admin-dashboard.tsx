@@ -11,13 +11,16 @@ import { StatsOverview } from "@/components/admin/stats-overview";
 import { MenuManager } from "@/components/admin/menu-manager";
 import { QrGenerator } from "@/components/admin/qr-generator";
 import { ReviewsPanel } from "@/components/admin/reviews-panel";
+import { TrialBanner, TrialExpired, RestaurantSuspended } from "@/components/admin/trial-banner";
 import { useMenu } from "@/components/menu-provider";
+import { useTrial } from "@/components/use-trial";
 
 type Tab = "overview" | "menu" | "qr" | "reviews";
 
 export function AdminDashboard() {
   const { t } = useLocale();
   const { restaurant } = useMenu();
+  const { expired, suspended, locked } = useTrial();
   const [tab, setTab] = useState<Tab>("overview");
 
   const tabs: { id: Tab; label: string; icon: typeof LayoutGrid }[] = [
@@ -38,8 +41,13 @@ export function AdminDashboard() {
             <button
               key={item.id}
               type="button"
-              onClick={() => setTab(item.id)}
-              className={`flex h-9 items-center gap-2.5 rounded-md px-2.5 text-start text-sm ${
+              onClick={() => {
+                if (!locked) {
+                  setTab(item.id);
+                }
+              }}
+              disabled={locked}
+              className={`flex h-9 items-center gap-2.5 rounded-md px-2.5 text-start text-sm disabled:opacity-40 ${
                 tab === item.id
                   ? "bg-subtle font-medium text-foreground"
                   : "text-muted hover:bg-subtle hover:text-foreground"
@@ -90,13 +98,20 @@ export function AdminDashboard() {
           </div>
         </header>
 
+        <TrialBanner />
+
         <nav className="flex gap-1 overflow-x-auto border-b border-border px-4 py-2 print:hidden md:hidden">
           {tabs.map((item) => (
             <button
               key={item.id}
               type="button"
-              onClick={() => setTab(item.id)}
-              className={`h-8 shrink-0 rounded-md px-3 text-xs ${
+              onClick={() => {
+                if (!locked) {
+                  setTab(item.id);
+                }
+              }}
+              disabled={locked}
+              className={`h-8 shrink-0 rounded-md px-3 text-xs disabled:opacity-40 ${
                 tab === item.id ? "bg-subtle font-medium" : "text-muted"
               }`}
             >
@@ -106,22 +121,30 @@ export function AdminDashboard() {
         </nav>
 
         <main className="flex-1 space-y-8 px-4 py-6 sm:px-6 print:p-0">
-          {tab === "overview" ? (
-            <div className="print:hidden">
-              <StatsOverview />
-            </div>
-          ) : null}
-          {tab === "menu" ? (
-            <div className="print:hidden">
-              <MenuManager />
-            </div>
-          ) : null}
-          {tab === "qr" ? <QrGenerator /> : null}
-          {tab === "reviews" ? (
-            <div className="print:hidden">
-              <ReviewsPanel />
-            </div>
-          ) : null}
+          {suspended ? (
+            <RestaurantSuspended />
+          ) : expired ? (
+            <TrialExpired />
+          ) : (
+            <>
+              {tab === "overview" ? (
+                <div className="print:hidden">
+                  <StatsOverview />
+                </div>
+              ) : null}
+              {tab === "menu" ? (
+                <div className="print:hidden">
+                  <MenuManager />
+                </div>
+              ) : null}
+              {tab === "qr" ? <QrGenerator /> : null}
+              {tab === "reviews" ? (
+                <div className="print:hidden">
+                  <ReviewsPanel />
+                </div>
+              ) : null}
+            </>
+          )}
         </main>
       </div>
     </div>

@@ -203,6 +203,15 @@ export function GuestMenu({
 
   const itemLabel = itemCount === 1 ? t("guest.item") : t("guest.items", { count: itemCount });
 
+  if (restaurant?.suspended) {
+    return (
+      <div className="mx-auto flex min-h-full max-w-md flex-col items-center justify-center px-6 py-20 text-center">
+        <h1 className="text-xl font-semibold tracking-tight">{t("access.suspendedTitle")}</h1>
+        <p className="mt-2 text-sm leading-6 text-muted">{t("access.guestSuspended")}</p>
+      </div>
+    );
+  }
+
   return (
     <div className="mx-auto flex min-h-full max-w-md flex-col">
       {toast ? <GuestToast kind={toast.kind} title={toast.title} body={toast.body} /> : null}

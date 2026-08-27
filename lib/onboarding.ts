@@ -4,6 +4,7 @@ import type { PlanId } from "@/lib/plans";
 import { setStoredRestaurantSlug } from "@/lib/restaurant-session";
 import { isReservedSlug, isValidSlug } from "@/lib/slug";
 import { getSupabase } from "@/lib/supabase";
+import { trialEndsAtIso } from "@/lib/trial";
 
 export type SlugStatus = "idle" | "checking" | "available" | "taken" | "invalid";
 
@@ -136,6 +137,8 @@ export async function registerRestaurant(
       owner_id: ownerId,
       phone,
       default_locale: input.defaultLocale,
+      is_trial: input.plan === "starter",
+      trial_ends_at: trialEndsAtIso(input.plan),
     })
     .select("id")
     .single();

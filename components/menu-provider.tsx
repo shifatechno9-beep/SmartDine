@@ -8,6 +8,7 @@ import {
   getStoredRestaurantSlug,
   subscribeRestaurantSlug,
 } from "@/lib/restaurant-session";
+import { loadRestaurantRow } from "@/lib/restaurants";
 import { getSupabase, isSupabaseConfigured } from "@/lib/supabase";
 
 type MenuContextValue = {
@@ -55,11 +56,10 @@ export function MenuProvider({
       return;
     }
 
-    const { data: restaurantRow, error: restaurantError } = await supabase
-      .from("restaurants")
-      .select("id, name, slug, logo, currency, phone, default_locale, plan")
-      .eq("slug", resolvedSlug)
-      .maybeSingle();
+    const { data: restaurantRow, error: restaurantError } = await loadRestaurantRow(
+      supabase,
+      resolvedSlug,
+    );
 
     if (restaurantError) {
       setError(restaurantError.message);

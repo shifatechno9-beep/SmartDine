@@ -118,3 +118,85 @@ begin
 end
 $$;
 
+alter table public.restaurants
+  add column if not exists is_trial boolean;
+
+alter table public.restaurants
+  add column if not exists trial_ends_at timestamptz;
+
+update public.restaurants
+set
+  trial_ends_at = coalesce(trial_ends_at, created_at + interval '7 days'),
+  is_trial = true
+where plan = 'starter';
+
+update public.restaurants
+set is_trial = false
+where plan is distinct from 'starter';
+
+alter table public.restaurants
+  alter column is_trial set default false;
+
+update public.restaurants
+set is_trial = false
+where is_trial is null;
+
+alter table public.restaurants
+  alter column is_trial set not null;
+
+alter table public.restaurants
+  add column if not exists suspended boolean;
+
+update public.restaurants
+set suspended = false
+where suspended is null;
+
+alter table public.restaurants
+  alter column suspended set default false;
+
+alter table public.restaurants
+  alter column suspended set not null;
+
+create table if not exists public.super_admins (
+  email text primary key
+);
+
+alter table public.super_admins enable row level security;
+revoke all on table public.super_admins from anon, authenticated;
+
+create or replace function public.is_super_admin()
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1
+    from public.super_admins s
+    where lower(s.email) = lower(coalesce(auth.jwt() ->> 'email', ''))
+  );
+$$;
+
+revoke all on function public.is_super_admin() from public;
+grant execute on function public.is_super_admin() to anon, authenticated, service_role;
+
+drop policy if exists "restaurants_super_admin_all" on public.restaurants;
+create policy "restaurants_super_admin_all"
+  on public.restaurants
+  for all
+  using (public.is_super_admin())
+  with check (public.is_super_admin());
+
+do $$
+begin
+  revoke update on table public.restaurants from anon, authenticated;
+  grant update (
+    name, slug, logo, currency, owner_id, phone, default_locale
+  ) on table public.restaurants to anon, authenticated;
+exception
+  when others then
+    raise notice 'restaurant column grants: %', sqlerrm;
+end
+$$;
+
