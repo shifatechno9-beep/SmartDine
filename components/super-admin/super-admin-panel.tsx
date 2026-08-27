@@ -30,7 +30,8 @@ export function SuperAdminPanel() {
   const [restaurants, setRestaurants] = useState<SuperAdminRestaurant[]>([]);
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<"setup" | "unauthorized" | "generic" | null>(null);
+  const [error, setError] = useState<"setup" | "unauthorized" | "schema" | "generic" | null>(null);
+  const [schemaLimited, setSchemaLimited] = useState(false);
   const [busyId, setBusyId] = useState<string | null>(null);
 
   const load = useCallback(async () => {
@@ -46,12 +47,17 @@ export function SuperAdminPanel() {
       return;
     }
     if (!response.ok) {
-      setError("generic");
+      const payload = (await response.json().catch(() => null)) as { error?: string } | null;
+      setError(payload?.error === "schema" ? "schema" : "generic");
       setLoading(false);
       return;
     }
-    const payload = (await response.json()) as { restaurants: SuperAdminRestaurant[] };
+    const payload = (await response.json()) as {
+      restaurants: SuperAdminRestaurant[];
+      schemaLimited?: boolean;
+    };
     setRestaurants(payload.restaurants);
+    setSchemaLimited(Boolean(payload.schemaLimited));
     setLoading(false);
   }, [router]);
 
@@ -167,6 +173,16 @@ export function SuperAdminPanel() {
         {error === "setup" ? (
           <p className="rounded-lg border border-dashed border-border px-4 py-3 text-sm text-muted">
             {t("super.setup")}
+          </p>
+        ) : null}
+        {error === "schema" ? (
+          <p className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-800 dark:text-amber-300">
+            {t("super.errorSchema")}
+          </p>
+        ) : null}
+        {schemaLimited ? (
+          <p className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-800 dark:text-amber-300">
+            {t("super.schemaLimited")}
           </p>
         ) : null}
         {error === "generic" ? (

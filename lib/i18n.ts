@@ -139,6 +139,10 @@ const en = {
   "super.setup":
     "Add SUPER_ADMIN_EMAILS and/or SUPER_ADMIN_SECRET plus SUPABASE_SERVICE_ROLE_KEY on the server.",
   "super.error": "Could not complete that action.",
+  "super.errorSchema":
+    "The database is missing trial/subscription columns. Run supabase/onboarding.sql in the Supabase SQL editor, then reload.",
+  "super.schemaLimited":
+    "Trial and suspension controls are limited until you run the latest SQL migration in Supabase.",
   "super.errorRequired": "Enter an allowlisted email and password, or the admin secret.",
   "super.errorForbidden": "This account is not allowed to open the master console.",
   "stats.dishes": "Total dishes",
@@ -501,6 +505,10 @@ const fr: Record<MessageKey, string> = {
   "super.setup":
     "Ajoutez SUPER_ADMIN_EMAILS et/ou SUPER_ADMIN_SECRET plus SUPABASE_SERVICE_ROLE_KEY côté serveur.",
   "super.error": "Impossible de terminer cette action.",
+  "super.errorSchema":
+    "La base manque des colonnes d’essai/abonnement. Exécutez supabase/onboarding.sql dans l’éditeur SQL Supabase, puis rechargez.",
+  "super.schemaLimited":
+    "Les contrôles d’essai et de suspension restent limités tant que la dernière migration SQL n’est pas appliquée dans Supabase.",
   "super.errorRequired": "Indiquez un e-mail autorisé et un mot de passe, ou le secret admin.",
   "super.errorForbidden": "Ce compte n’a pas le droit d’ouvrir la console maître.",
   "stats.dishes": "Plats au menu",
@@ -860,6 +868,10 @@ const ar: Record<MessageKey, string> = {
   "super.setup":
     "أضيفوا SUPER_ADMIN_EMAILS و/أو SUPER_ADMIN_SECRET مع SUPABASE_SERVICE_ROLE_KEY على الخادم.",
   "super.error": "تعذر إكمال هذا الإجراء.",
+  "super.errorSchema":
+    "قاعدة البيانات تفتقد أعمدة التجربة والاشتراك. شغّلوا supabase/onboarding.sql في محرر SQL بـ Supabase ثم أعيدوا التحميل.",
+  "super.schemaLimited":
+    "ضوابط التجربة والتعليق محدودة حتى تطبّقوا آخر ترحيل SQL في Supabase.",
   "super.errorRequired": "أدخلوا بريداً مدرجاً وكلمة مرور، أو المفتاح السري.",
   "super.errorForbidden": "هذا الحساب غير مسموح له بفتح لوحة الإدارة العامة.",
   "stats.dishes": "إجمالي الأطباق",

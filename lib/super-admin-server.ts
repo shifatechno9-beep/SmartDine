@@ -36,7 +36,12 @@ export async function requireSuperAdmin(
     secret && cookie && secretsMatch(decodeURIComponent(cookie), superAdminCookieValue(secret)),
   );
 
-  const identity = await emailFromBearer(request.headers.get("authorization"));
+  let identity: string | null = null;
+  try {
+    identity = await emailFromBearer(request.headers.get("authorization"));
+  } catch {
+    return { error: NextResponse.json({ error: "unauthorized" }, { status: 401 }) };
+  }
   const emailOk = identity === "__secret__" || isSuperAdminEmail(identity);
 
   if (!cookieOk && !emailOk) {
