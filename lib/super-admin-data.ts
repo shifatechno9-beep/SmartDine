@@ -23,12 +23,6 @@ type AdminRow = {
   role: string;
 };
 
-const RESTAURANT_SELECTS = [
-  "id, name, slug, phone, plan, is_trial, trial_ends_at, suspended, created_at",
-  "id, name, slug, phone, plan, created_at",
-  "id, name, slug, phone, created_at",
-] as const;
-
 export function isSchemaGap(error: PostgrestError | null | undefined) {
   if (!error) {
     return false;
@@ -46,28 +40,19 @@ export function isSchemaGap(error: PostgrestError | null | undefined) {
 }
 
 async function loadRestaurantRows(admin: AdminClient) {
-  let lastError: PostgrestError | null = null;
+  const { data, error } = await admin
+    .from("restaurants")
+    .select("*")
+    .order("created_at", { ascending: false });
 
-  for (const select of RESTAURANT_SELECTS) {
-    const { data, error } = await admin
-      .from("restaurants")
-      .select(select)
-      .order("created_at", { ascending: false });
-
-    if (!error) {
-      return {
-        rows: (data ?? []) as RestaurantRow[],
-        schemaLimited: select !== RESTAURANT_SELECTS[0],
-      };
-    }
-
-    lastError = error;
-    if (!isSchemaGap(error)) {
-      break;
-    }
+  if (error) {
+    throw error;
   }
 
-  throw lastError ?? new Error("restaurants");
+  const rows = (data ?? []) as RestaurantRow[];
+  const schemaLimited = rows.length > 0 && !("is_trial" in rows[0]);
+
+  return { rows, schemaLimited };
 }
 
 async function loadAdminRows(admin: AdminClient) {
