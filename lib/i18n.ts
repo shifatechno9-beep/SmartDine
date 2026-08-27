@@ -58,6 +58,7 @@ const en = {
   "cta.kitchen": "Open kitchen display",
   "cta.guest": "Guest menu",
   "cta.start": "Open your restaurant",
+  "cta.login": "Log in",
   "cta.pricing": "See pricing",
   "landing.kicker": "Built for Morocco",
   "landing.title": "Menus that take the order.",
@@ -331,6 +332,22 @@ const en = {
   "register.errorRequired": "Restaurant name, a valid menu URL, and a phone number are required.",
   "register.setup":
     "Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY, then run supabase/schema.sql (or supabase/onboarding.sql) before creating a restaurant.",
+  "register.hasAccount": "Already on SmartDine?",
+  "login.kicker": "Operator access",
+  "login.title": "Log back into your restaurant.",
+  "login.body":
+    "Use the owner email and password from onboarding. We open the dashboard for that restaurant.",
+  "login.email": "Email",
+  "login.password": "Password",
+  "login.submit": "Log in",
+  "login.submitting": "Signing in…",
+  "login.noAccount": "No restaurant yet?",
+  "login.error": "Could not sign in. Try again.",
+  "login.errorRequired": "Enter your email and password.",
+  "login.errorEmail": "Enter a valid email address.",
+  "login.errorCredentials": "This email or password is not recognized.",
+  "login.errorConfirm": "Confirm the email we sent, then try again.",
+  "login.errorRestaurant": "This account is not linked to a restaurant yet. Open a restaurant first.",
 } as const;
 
 export type MessageKey = keyof typeof en;
@@ -355,6 +372,7 @@ const fr: Record<MessageKey, string> = {
   "cta.kitchen": "Ouvrir l’écran cuisine",
   "cta.guest": "Menu client",
   "cta.start": "Ouvrir votre restaurant",
+  "cta.login": "Connexion",
   "cta.pricing": "Voir les tarifs",
   "landing.kicker": "Conçu pour le Maroc",
   "landing.title": "Des menus qui prennent la commande.",
@@ -628,6 +646,23 @@ const fr: Record<MessageKey, string> = {
   "register.errorRequired": "Le nom du restaurant, une URL de menu valide et un téléphone sont requis.",
   "register.setup":
     "Ajoutez NEXT_PUBLIC_SUPABASE_URL et NEXT_PUBLIC_SUPABASE_ANON_KEY, puis exécutez supabase/schema.sql (ou supabase/onboarding.sql) avant de créer un restaurant.",
+  "register.hasAccount": "Déjà sur SmartDine ?",
+  "login.kicker": "Accès exploitant",
+  "login.title": "Reconnectez-vous à votre restaurant.",
+  "login.body":
+    "Utilisez l’e-mail et le mot de passe de l’onboarding. Nous ouvrons le tableau de bord de ce restaurant.",
+  "login.email": "E-mail",
+  "login.password": "Mot de passe",
+  "login.submit": "Se connecter",
+  "login.submitting": "Connexion…",
+  "login.noAccount": "Pas encore de restaurant ?",
+  "login.error": "Impossible de se connecter. Réessayez.",
+  "login.errorRequired": "Indiquez votre e-mail et votre mot de passe.",
+  "login.errorEmail": "Indiquez une adresse e-mail valide.",
+  "login.errorCredentials": "Cet e-mail ou ce mot de passe n’est pas reconnu.",
+  "login.errorConfirm": "Confirmez l’e-mail envoyé, puis réessayez.",
+  "login.errorRestaurant":
+    "Ce compte n’est pas encore lié à un restaurant. Ouvrez d’abord un restaurant.",
 };
 
 const ar: Record<MessageKey, string> = {
@@ -650,6 +685,7 @@ const ar: Record<MessageKey, string> = {
   "cta.kitchen": "افتح شاشة المطبخ",
   "cta.guest": "قائمة الزبون",
   "cta.start": "افتحوا مطعمكم",
+  "cta.login": "تسجيل الدخول",
   "cta.pricing": "عرض الأسعار",
   "landing.kicker": "مصمم للمغرب",
   "landing.title": "قوائم تستقبل الطلب.",
@@ -923,6 +959,22 @@ const ar: Record<MessageKey, string> = {
   "register.errorRequired": "اسم المطعم ورابط قائمة صالح ورقم هاتف مطلوبة.",
   "register.setup":
     "أضيفوا NEXT_PUBLIC_SUPABASE_URL و NEXT_PUBLIC_SUPABASE_ANON_KEY ثم نفّذوا supabase/schema.sql (أو supabase/onboarding.sql) قبل إنشاء مطعم.",
+  "register.hasAccount": "لديكم مطعم على سمارت داين؟",
+  "login.kicker": "دخول المشغّل",
+  "login.title": "عودوا إلى لوحة مطعمكم.",
+  "login.body":
+    "استخدموا بريد المالك وكلمة المرور من التهيئة. نفتح لوحة التحكم الخاصة بذلك المطعم.",
+  "login.email": "البريد الإلكتروني",
+  "login.password": "كلمة المرور",
+  "login.submit": "تسجيل الدخول",
+  "login.submitting": "جاري الدخول…",
+  "login.noAccount": "ليس لديكم مطعم بعد؟",
+  "login.error": "تعذر تسجيل الدخول. أعيدوا المحاولة.",
+  "login.errorRequired": "أدخلوا البريد وكلمة المرور.",
+  "login.errorEmail": "أدخلوا بريداً إلكترونياً صالحاً.",
+  "login.errorCredentials": "هذا البريد أو كلمة المرور غير معروفين.",
+  "login.errorConfirm": "أكّدوا البريد الذي أرسلناه ثم أعيدوا المحاولة.",
+  "login.errorRestaurant": "هذا الحساب غير مرتبط بمطعم بعد. افتحوا مطعماً أولاً.",
 };
 
 export const messages: Record<Locale, Record<MessageKey, string>> = {

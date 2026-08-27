@@ -486,6 +486,13 @@ export function RegisterWizard({ initialPlan }: { initialPlan?: string }) {
             </p>
           ) : null}
 
+          <p className="mt-6 text-sm text-muted">
+            {t("register.hasAccount")}{" "}
+            <Link href="/auth/login" className="font-medium text-foreground underline-offset-2 hover:underline">
+              {t("cta.login")}
+            </Link>
+          </p>
+
           <div className="mt-8 flex items-center justify-between gap-3">
             {step === "restaurant" ? (
               <Link href="/pricing" className="text-sm text-muted hover:text-foreground">

@@ -37,6 +37,12 @@ export function MarketingHeader({
           <LanguageSwitcher compact />
           <ThemeToggle />
           <Link
+            href="/auth/login"
+            className="inline-flex h-9 items-center rounded-md border border-border px-3 text-sm font-medium hover:bg-subtle"
+          >
+            {t("cta.login")}
+          </Link>
+          <Link
             href={primaryHref}
             className="hidden h-9 items-center rounded-md bg-foreground px-3.5 text-sm font-medium text-background sm:inline-flex"
           >
