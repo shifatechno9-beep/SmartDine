@@ -1,6 +1,6 @@
 import type { User } from "@supabase/supabase-js";
 import { isLocale, type Locale } from "@/lib/i18n";
-import { setStoredRestaurantSlug } from "@/lib/restaurant-session";
+import { clearStoredRestaurantSlug, setStoredRestaurantSlug } from "@/lib/restaurant-session";
 import { getSupabase, type TypedSupabaseClient } from "@/lib/supabase";
 
 export type LoginRestaurantResult = {
@@ -155,4 +155,12 @@ export async function loginRestaurant(
 
   setStoredRestaurantSlug(restaurant.slug);
   return restaurant;
+}
+
+export async function logoutRestaurant() {
+  const supabase = getSupabase();
+  if (supabase) {
+    await supabase.auth.signOut();
+  }
+  clearStoredRestaurantSlug();
 }

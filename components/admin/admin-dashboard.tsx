@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ChefHat, LayoutGrid, MessageSquareQuote, QrCode, UtensilsCrossed } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ChefHat, LayoutGrid, LogOut, MessageSquareQuote, QrCode, UtensilsCrossed } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LanguageSwitcher } from "@/components/language-switcher";
@@ -14,14 +15,30 @@ import { ReviewsPanel } from "@/components/admin/reviews-panel";
 import { TrialBanner, TrialExpired, RestaurantSuspended } from "@/components/admin/trial-banner";
 import { useMenu } from "@/components/menu-provider";
 import { useTrial } from "@/components/use-trial";
+import { logoutRestaurant } from "@/lib/auth";
 
 type Tab = "overview" | "menu" | "qr" | "reviews";
 
 export function AdminDashboard() {
   const { t } = useLocale();
+  const router = useRouter();
   const { restaurant } = useMenu();
   const { expired, suspended, locked } = useTrial();
   const [tab, setTab] = useState<Tab>("overview");
+  const [signingOut, setSigningOut] = useState(false);
+
+  async function handleLogout() {
+    if (signingOut) {
+      return;
+    }
+    setSigningOut(true);
+    try {
+      await logoutRestaurant();
+      router.replace("/auth/login");
+    } catch {
+      setSigningOut(false);
+    }
+  }
 
   const tabs: { id: Tab; label: string; icon: typeof LayoutGrid }[] = [
     { id: "overview", label: t("nav.overview"), icon: LayoutGrid },
@@ -79,9 +96,20 @@ export function AdminDashboard() {
             </span>
           )}
         </nav>
-        <p className="px-5 py-4 text-[11px] text-muted">
-          {restaurant ? `${restaurant.name} · ${t("dashboard.service")}` : t("dashboard.floor")}
-        </p>
+        <div className="border-t border-border px-3 py-3">
+          <p className="truncate px-2.5 pb-2 text-[11px] text-muted">
+            {restaurant ? `${restaurant.name} · ${t("dashboard.service")}` : t("dashboard.floor")}
+          </p>
+          <button
+            type="button"
+            onClick={() => void handleLogout()}
+            disabled={signingOut}
+            className="flex h-9 w-full items-center gap-2.5 rounded-md px-2.5 text-start text-sm text-muted hover:bg-subtle hover:text-foreground disabled:opacity-40"
+          >
+            <LogOut className="size-4 rtl:rotate-180" strokeWidth={1.5} />
+            {t("nav.logout")}
+          </button>
+        </div>
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
@@ -95,6 +123,16 @@ export function AdminDashboard() {
           <div className="flex items-center gap-2">
             <LanguageSwitcher compact />
             <ThemeToggle />
+            <button
+              type="button"
+              onClick={() => void handleLogout()}
+              disabled={signingOut}
+              aria-label={t("nav.logout")}
+              className="inline-flex h-9 items-center gap-2 rounded-md border border-border px-3 text-sm text-muted hover:bg-subtle hover:text-foreground disabled:opacity-40"
+            >
+              <LogOut className="size-4 rtl:rotate-180" strokeWidth={1.5} />
+              <span className="hidden sm:inline">{t("nav.logout")}</span>
+            </button>
           </div>
         </header>
 

@@ -15,6 +15,15 @@ export function setStoredRestaurantSlug(slug: string) {
   window.dispatchEvent(new Event(CHANGE_EVENT));
 }
 
+export function clearStoredRestaurantSlug() {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  window.localStorage.removeItem(RESTAURANT_SLUG_KEY);
+  window.dispatchEvent(new Event(CHANGE_EVENT));
+}
+
 export function subscribeRestaurantSlug(onStoreChange: () => void) {
   window.addEventListener("storage", onStoreChange);
   window.addEventListener(CHANGE_EVENT, onStoreChange);
