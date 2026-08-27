@@ -378,6 +378,8 @@ const en = {
   "register.errorSlug": "Choose another menu URL — this one is not available.",
   "register.errorPassword": "Passwords must match and have at least 8 characters.",
   "register.errorEmail": "Enter a valid email for the admin account.",
+  "register.errorEmailTaken": "This email is already registered. Log in instead.",
+  "register.errorRateLimit": "Too many signup attempts. Wait a few minutes, then try again.",
   "register.errorPhone": "Enter a valid Moroccan or international phone number.",
   "register.errorRequired": "Restaurant name, a valid menu URL, and a phone number are required.",
   "register.setup":
@@ -744,6 +746,8 @@ const fr: Record<MessageKey, string> = {
   "register.errorSlug": "Choisissez une autre URL — celle-ci n’est pas disponible.",
   "register.errorPassword": "Les mots de passe doivent correspondre et faire au moins 8 caractères.",
   "register.errorEmail": "Indiquez un e-mail valide pour le compte admin.",
+  "register.errorEmailTaken": "Cet e-mail est déjà enregistré. Connectez-vous.",
+  "register.errorRateLimit": "Trop de tentatives d’inscription. Attendez quelques minutes, puis réessayez.",
   "register.errorPhone": "Indiquez un numéro marocain ou international valide.",
   "register.errorRequired": "Le nom du restaurant, une URL de menu valide et un téléphone sont requis.",
   "register.setup":
@@ -1107,6 +1111,8 @@ const ar: Record<MessageKey, string> = {
   "register.errorSlug": "اختاروا رابطاً آخر — هذا غير متاح.",
   "register.errorPassword": "كلمتا المرور يجب أن تتطابقا وأن تحتوي كل منهما على 8 أحرف على الأقل.",
   "register.errorEmail": "أدخلوا بريداً صالحاً لحساب المسؤول.",
+  "register.errorEmailTaken": "هذا البريد مسجّل مسبقاً. سجّلوا الدخول بدلاً من ذلك.",
+  "register.errorRateLimit": "محاولات تسجيل كثيرة. انتظروا بضع دقائق ثم أعيدوا المحاولة.",
   "register.errorPhone": "أدخلوا رقماً مغربياً أو دولياً صالحاً.",
   "register.errorRequired": "اسم المطعم ورابط قائمة صالح ورقم هاتف مطلوبة.",
   "register.setup":

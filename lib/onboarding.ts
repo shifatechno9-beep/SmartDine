@@ -26,6 +26,66 @@ export type RegisterRestaurantResult = {
   needsEmailConfirm: boolean;
 };
 
+export type RegisterErrorCode =
+  | "setup"
+  | "slug"
+  | "phone"
+  | "email"
+  | "emailTaken"
+  | "password"
+  | "rateLimit"
+  | "required"
+  | "generic";
+
+export function mapRegisterError(error: unknown): RegisterErrorCode {
+  if (error instanceof Error) {
+    if (error.message === "setup") {
+      return "setup";
+    }
+    if (error.message === "slug") {
+      return "slug";
+    }
+    if (error.message === "phone") {
+      return "phone";
+    }
+  }
+
+  const candidate = error as { message?: string; code?: string; status?: number };
+  const code = (candidate.code ?? "").toLowerCase();
+  const message = (candidate.message ?? "").toLowerCase();
+
+  if (
+    candidate.status === 429 ||
+    code === "over_email_send_rate_limit" ||
+    code === "over_request_rate_limit" ||
+    message.includes("rate limit")
+  ) {
+    return "rateLimit";
+  }
+
+  if (
+    code === "user_already_exists" ||
+    message.includes("user already registered") ||
+    message.includes("already been registered")
+  ) {
+    return "emailTaken";
+  }
+
+  if (code === "weak_password" || message.includes("password")) {
+    return "password";
+  }
+
+  if (code === "invalid_email" || message.includes("invalid email")) {
+    return "email";
+  }
+
+  if (message.includes("duplicate") || message.includes("unique")) {
+    return "slug";
+  }
+
+  return "generic";
+}
+
 function logoExtension(file: File) {
   const fromName = file.name.split(".").pop()?.toLowerCase();
   if (fromName === "png" || fromName === "jpg" || fromName === "jpeg" || fromName === "webp") {

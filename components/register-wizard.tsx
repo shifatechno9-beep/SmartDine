@@ -9,7 +9,9 @@ import { useLocale } from "@/components/locale-provider";
 import { DEFAULT_LOCALE, LOCALES, formatMad, type Locale } from "@/lib/i18n";
 import {
   checkSlugAvailability,
+  mapRegisterError,
   registerRestaurant,
+  type RegisterErrorCode,
   type SlugStatus,
 } from "@/lib/onboarding";
 import { getPlan, isCustomPlan, parsePlanId, type PlanId } from "@/lib/plans";
@@ -51,7 +53,7 @@ export function RegisterWizard({ initialPlan }: { initialPlan?: string }) {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<RegisterErrorCode | null>(null);
 
   const stepIndex = STEPS.indexOf(step);
 
@@ -169,20 +171,17 @@ export function RegisterWizard({ initialPlan }: { initialPlan?: string }) {
       setLocale(defaultLocale);
       router.replace("/admin/dashboard");
     } catch (caught) {
-      const message = caught instanceof Error ? caught.message : "";
-      if (message === "slug" || message.toLowerCase().includes("duplicate")) {
-        setError("slug");
+      const code = mapRegisterError(caught);
+      setError(code);
+      if (code === "slug" || code === "phone" || code === "required") {
         setStep("restaurant");
-      } else if (message === "phone") {
-        setError("phone");
-        setStep("restaurant");
-      } else if (message.toLowerCase().includes("email") || message.toLowerCase().includes("user already")) {
-        setError("email");
+      } else if (
+        code === "email" ||
+        code === "emailTaken" ||
+        code === "password" ||
+        code === "rateLimit"
+      ) {
         setStep("account");
-      } else if (message === "setup") {
-        setError("setup");
-      } else {
-        setError("generic");
       }
     } finally {
       setSubmitting(false);
@@ -480,7 +479,11 @@ export function RegisterWizard({ initialPlan }: { initialPlan?: string }) {
                       ? t("register.errorPhone")
                       : error === "email"
                         ? t("register.errorEmail")
-                        : error === "required"
+                        : error === "emailTaken"
+                          ? t("register.errorEmailTaken")
+                          : error === "rateLimit"
+                            ? t("register.errorRateLimit")
+                            : error === "required"
                           ? t("register.errorRequired")
                           : t("register.error")}
             </p>
@@ -526,9 +529,13 @@ export function RegisterWizard({ initialPlan }: { initialPlan?: string }) {
                     return;
                   }
                   if (step === "account" && !accountReady) {
-                    setError(
-                      password !== passwordConfirm || password.length < 8 ? "password" : "email",
-                    );
+                    if (ownerName.trim().length < 2) {
+                      setError("required");
+                    } else if (!isEmail(email)) {
+                      setError("email");
+                    } else {
+                      setError("password");
+                    }
                     return;
                   }
                   setError(null);
