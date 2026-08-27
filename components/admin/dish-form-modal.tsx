@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useId, useState } from "react";
-import { X } from "lucide-react";
+import { useEffect, useId, useRef, useState } from "react";
+import { Upload, X } from "lucide-react";
 import { LOCALES, type Locale } from "@/lib/i18n";
 import { useLocale } from "@/components/locale-provider";
+import { useMenu } from "@/components/menu-provider";
 import { StockSwitch } from "@/components/stock-switch";
 import {
   CATEGORY_KEYS,
@@ -12,6 +13,11 @@ import {
   type DishCategory,
   type LocalizedText,
 } from "@/lib/menu";
+import {
+  isAllowedDishImage,
+  MAX_DISH_IMAGE_BYTES,
+  uploadDishImage,
+} from "@/lib/upload-image";
 
 type Draft = Omit<Dish, "id">;
 
@@ -36,14 +42,20 @@ export function DishFormModal({
   onDelete?: (id: string) => void | Promise<void>;
 }) {
   const { t } = useLocale();
+  const { restaurant } = useMenu();
   const formId = useId();
+  const fileInputId = `${formId}-image-file`;
+  const fileRef = useRef<HTMLInputElement>(null);
   const isNew = dish === "new";
   const existing = dish && dish !== "new" ? dish : null;
   const [draft, setDraft] = useState<Draft>(existing ?? blankDraft());
   const [error, setError] = useState(false);
   const [saveError, setSaveError] = useState<"save" | "delete" | null>(null);
+  const [uploadError, setUploadError] = useState<"type" | "size" | "upload" | null>(null);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [previewFailed, setPreviewFailed] = useState(false);
 
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
@@ -61,6 +73,35 @@ export function DishFormModal({
       ...current,
       [field]: { ...current[field], [code]: value },
     }));
+  }
+
+  async function handleImageFile(file: File) {
+    if (!isAllowedDishImage(file)) {
+      setUploadError("type");
+      return;
+    }
+    if (file.size > MAX_DISH_IMAGE_BYTES) {
+      setUploadError("size");
+      return;
+    }
+
+    const slug = restaurant?.slug?.trim();
+    if (!slug) {
+      setUploadError("upload");
+      return;
+    }
+
+    setUploading(true);
+    setUploadError(null);
+    try {
+      const imageUrl = await uploadDishImage(slug, file);
+      setDraft((current) => ({ ...current, imageUrl }));
+      setPreviewFailed(false);
+    } catch {
+      setUploadError("upload");
+    } finally {
+      setUploading(false);
+    }
   }
 
   async function handleSave() {
@@ -118,8 +159,8 @@ export function DishFormModal({
         type="button"
         aria-label={t("form.cancel")}
         className="absolute inset-0 bg-foreground/30 backdrop-blur-[2px]"
-        onClick={saving ? undefined : onClose}
-        disabled={saving}
+        onClick={saving || uploading ? undefined : onClose}
+        disabled={saving || uploading}
       />
       <div
         role="dialog"
@@ -134,7 +175,8 @@ export function DishFormModal({
           <button
             type="button"
             onClick={onClose}
-            className="inline-flex size-8 items-center justify-center rounded-md hover:bg-subtle"
+            disabled={saving || uploading}
+            className="inline-flex size-8 items-center justify-center rounded-md hover:bg-subtle disabled:opacity-50"
             aria-label={t("form.cancel")}
           >
             <X className="size-4" />
@@ -215,20 +257,66 @@ export function DishFormModal({
             </label>
           </div>
 
-          <label className="block">
+          <div>
             <span className="mb-1 block text-xs font-medium text-muted">{t("form.image")}</span>
-            <input
-              dir="ltr"
-              type="url"
-              placeholder="https://"
-              value={draft.imageUrl}
-              onChange={(event) =>
-                setDraft((current) => ({ ...current, imageUrl: event.target.value }))
-              }
-              className="h-9 w-full rounded-md border border-border bg-background px-3 font-mono text-xs outline-none focus:border-foreground"
-            />
+            <div className="flex gap-2">
+              <input
+                dir="ltr"
+                type="url"
+                placeholder="https://"
+                value={draft.imageUrl}
+                disabled={uploading || saving}
+                onChange={(event) => {
+                  setPreviewFailed(false);
+                  setDraft((current) => ({ ...current, imageUrl: event.target.value }));
+                }}
+                className="h-9 min-w-0 flex-1 rounded-md border border-border bg-background px-3 font-mono text-xs outline-none focus:border-foreground disabled:opacity-50"
+              />
+              <input
+                ref={fileRef}
+                id={fileInputId}
+                type="file"
+                accept="image/png,image/jpeg,image/webp"
+                className="sr-only"
+                disabled={uploading || saving}
+                onChange={(event) => {
+                  const file = event.target.files?.[0];
+                  event.target.value = "";
+                  if (file) {
+                    void handleImageFile(file);
+                  }
+                }}
+              />
+              <button
+                type="button"
+                disabled={uploading || saving}
+                onClick={() => fileRef.current?.click()}
+                className="inline-flex h-9 shrink-0 items-center gap-2 rounded-md border border-border px-3 text-sm hover:bg-subtle disabled:opacity-50"
+              >
+                <Upload className="size-3.5" />
+                {uploading ? t("form.imageUploading") : t("form.imageUpload")}
+              </button>
+            </div>
+            {draft.imageUrl && !previewFailed ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={draft.imageUrl}
+                alt=""
+                onError={() => setPreviewFailed(true)}
+                className="mt-2 h-20 w-28 rounded-md border border-border object-cover"
+              />
+            ) : null}
             <span className="mt-1 block text-[11px] text-muted">{t("form.imageHint")}</span>
-          </label>
+            {uploadError ? (
+              <p className="mt-1 text-xs text-red-600 dark:text-red-400">
+                {uploadError === "type"
+                  ? t("form.imageType")
+                  : uploadError === "size"
+                    ? t("form.imageTooLarge")
+                    : t("form.imageUploadError")}
+              </p>
+            ) : null}
+          </div>
 
           <div className="flex items-center justify-between rounded-xl border border-border px-4 py-3">
             <div>
@@ -256,7 +344,7 @@ export function DishFormModal({
           {existing && onDelete ? (
             <button
               type="button"
-              disabled={saving}
+              disabled={saving || uploading}
               onClick={() => void handleDelete()}
               className="h-9 rounded-md px-3 text-sm text-red-600 hover:bg-red-50 disabled:opacity-50 dark:text-red-400 dark:hover:bg-red-950/40"
             >
@@ -268,7 +356,7 @@ export function DishFormModal({
           <div className="flex gap-2">
             <button
               type="button"
-              disabled={saving}
+              disabled={saving || uploading}
               onClick={onClose}
               className="h-9 rounded-md border border-border px-3 text-sm hover:bg-subtle disabled:opacity-50"
             >
@@ -276,7 +364,7 @@ export function DishFormModal({
             </button>
             <button
               type="button"
-              disabled={saving}
+              disabled={saving || uploading}
               onClick={() => void handleSave()}
               className="h-9 rounded-md bg-foreground px-3 text-sm font-medium text-background disabled:opacity-50"
             >
