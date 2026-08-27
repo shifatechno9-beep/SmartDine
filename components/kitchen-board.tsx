@@ -12,18 +12,22 @@ import { textFor } from "@/lib/menu";
 import { displayOrderId } from "@/lib/mappers";
 import { BOARD_COLUMNS, type KitchenTicket, type TicketStatus } from "@/lib/tickets";
 
+let cachedNow = 0;
+
 function subscribeToNow(onChange: () => void) {
-  const id = window.setInterval(onChange, 1000);
+  cachedNow = Date.now();
+  const id = window.setInterval(() => {
+    cachedNow = Date.now();
+    onChange();
+  }, 1000);
   return () => window.clearInterval(id);
 }
 
-let sessionStart = 0;
-
 function getClientNow() {
-  if (sessionStart === 0) {
-    sessionStart = Date.now();
+  if (cachedNow === 0) {
+    cachedNow = Date.now();
   }
-  return Date.now();
+  return cachedNow;
 }
 
 function ageLabel(createdAt: number, now: number) {
