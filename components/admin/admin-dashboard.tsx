@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ChefHat, LayoutGrid, LogOut, MessageSquareQuote, QrCode, Receipt, UtensilsCrossed } from "lucide-react";
+import { ChefHat, LayoutGrid, LogOut, MessageSquareQuote, QrCode, UtensilsCrossed } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LanguageSwitcher } from "@/components/language-switcher";
@@ -12,14 +12,13 @@ import { StatsOverview } from "@/components/admin/stats-overview";
 import { MenuManager } from "@/components/admin/menu-manager";
 import { QrGenerator } from "@/components/admin/qr-generator";
 import { ReviewsPanel } from "@/components/admin/reviews-panel";
-import { OrdersStoragePanel } from "@/components/admin/orders-storage-panel";
 import { TrialHeaderAction, TrialExpired, RestaurantSuspended } from "@/components/admin/trial-banner";
 import { PlanBadge } from "@/components/admin/plan-badge";
 import { useMenu } from "@/components/menu-provider";
 import { useTrial } from "@/components/use-trial";
 import { logoutRestaurant } from "@/lib/auth";
 
-type Tab = "overview" | "menu" | "qr" | "reviews" | "orders";
+type Tab = "overview" | "menu" | "qr" | "reviews";
 
 export function AdminDashboard() {
   const { t } = useLocale();
@@ -46,7 +45,6 @@ export function AdminDashboard() {
     { id: "overview", label: t("nav.overview"), icon: LayoutGrid },
     { id: "menu", label: t("nav.menu"), icon: UtensilsCrossed },
     { id: "qr", label: t("nav.qr"), icon: QrCode },
-    { id: "orders", label: t("nav.ordersStorage"), icon: Receipt },
     { id: "reviews", label: t("nav.reviews"), icon: MessageSquareQuote },
   ];
 
@@ -181,11 +179,6 @@ export function AdminDashboard() {
                 </div>
               ) : null}
               {tab === "qr" ? <QrGenerator /> : null}
-              {tab === "orders" ? (
-                <div className="print:hidden">
-                  <OrdersStoragePanel />
-                </div>
-              ) : null}
               {tab === "reviews" ? (
                 <div className="print:hidden">
                   <ReviewsPanel />

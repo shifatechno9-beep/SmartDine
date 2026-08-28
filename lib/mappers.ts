@@ -1,7 +1,6 @@
 import type { Dish, DishCategory, LocalizedText } from "@/lib/menu";
 import type { Json, OrderStatusDb } from "@/lib/database.types";
 import { parseLocale, type Locale } from "@/lib/i18n";
-import { isOrderStorageStatus } from "@/lib/order-storage";
 import { resolveStarterTrialEnd } from "@/lib/trial";
 import type { KitchenTicket, KitchenTicketItem, TicketStatus } from "@/lib/tickets";
 
@@ -157,7 +156,6 @@ export function mapOrder(
     table_number: string | null;
     items: Json;
     status: OrderStatusDb;
-    storage_status?: string | null;
     total_amount: number;
     notes: string | null;
     created_at: string;
@@ -172,7 +170,6 @@ export function mapOrder(
     total: Math.max(0, finiteNumber(row.total_amount, 0)),
     notes: row.notes ?? "",
     status: STATUS_FROM_DB[row.status] ?? "new",
-    storageStatus: isOrderStorageStatus(row.storage_status) ? row.storage_status : null,
     createdAt: finiteNumber(new Date(row.created_at).getTime(), Date.now()),
     locale: "fr",
   };
@@ -195,7 +192,6 @@ export function orderFromPayload(value: unknown, restaurantSlug: string): Kitche
       table_number: row.table_number == null ? null : String(row.table_number),
       items: (row.items as Json) ?? [],
       status: isOrderStatusDb(row.status) ? row.status : "pending",
-      storage_status: isOrderStorageStatus(row.storage_status) ? row.storage_status : null,
       total_amount: finiteNumber(row.total_amount, 0),
       notes: row.notes == null ? null : String(row.notes),
       created_at: String(row.created_at ?? new Date().toISOString()),

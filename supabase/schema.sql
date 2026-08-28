@@ -13,9 +13,6 @@ begin
   if not exists (select 1 from pg_type where typname = 'order_status') then
     create type order_status as enum ('pending', 'preparing', 'ready', 'completed');
   end if;
-  if not exists (select 1 from pg_type where typname = 'order_storage_status') then
-    create type order_storage_status as enum ('paid', 'cancelled', 'changed');
-  end if;
 end
 $$;
 
@@ -55,7 +52,6 @@ create table if not exists public.orders (
   table_number text,
   items jsonb not null default '[]'::jsonb,
   status order_status not null default 'pending',
-  storage_status order_storage_status,
   total_amount numeric(10, 2) not null default 0,
   notes text,
   created_at timestamptz not null default now()

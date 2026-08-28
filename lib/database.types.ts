@@ -7,7 +7,6 @@ export type Json =
   | Json[];
 
 export type OrderStatusDb = "pending" | "preparing" | "ready" | "completed";
-export type OrderStorageStatusDb = "paid" | "cancelled" | "changed";
 export type PlanIdDb = "starter" | "pro" | "enterprise";
 
 export type Database = {
@@ -110,7 +109,6 @@ export type Database = {
           table_number: string | null;
           items: Json;
           status: OrderStatusDb;
-          storage_status: OrderStorageStatusDb | null;
           total_amount: number;
           notes: string | null;
           created_at: string;
@@ -121,7 +119,6 @@ export type Database = {
           table_number?: string | null;
           items?: Json;
           status?: OrderStatusDb;
-          storage_status?: OrderStorageStatusDb | null;
           total_amount?: number;
           notes?: string | null;
           created_at?: string;
@@ -132,7 +129,6 @@ export type Database = {
           table_number?: string | null;
           items?: Json;
           status?: OrderStatusDb;
-          storage_status?: OrderStorageStatusDb | null;
           total_amount?: number;
           notes?: string | null;
           created_at?: string;
