@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: MenuPageProps): Promise<Metad
 
   return {
     title: name,
-    description: `Menu ${name} — SmartDine. Arabe, français, anglais. Prix en MAD.`,
+    description: `Menu ${name} — SavyDine. Arabe, français, anglais. Prix en MAD.`,
   };
 }
 

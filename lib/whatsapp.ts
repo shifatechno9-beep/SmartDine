@@ -35,7 +35,7 @@ export function buildWhatsAppOrderMessage(input: WhatsAppOrderInput) {
     : "";
 
   return [
-    "*SmartDine — Nouvelle commande / طلب جديد*",
+    "*SavyDine — Nouvelle commande / طلب جديد*",
     input.restaurantName,
     "",
     `🪑 ${tableFr} / ${tableAr}`,

@@ -2,24 +2,29 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* SavyDine — gold + teal monogram on ink */
 :root {
-  --background: #fafafa;
-  --foreground: #0a0a0a;
-  --muted: #71717a;
-  --subtle: #f4f4f5;
-  --border: #e4e4e7;
-  --accent: #9a7348;
-  --accent-foreground: #fafafa;
+  --background: #f4f7f6;
+  --foreground: #0e1212;
+  --muted: #5c6b68;
+  --subtle: #e6eeec;
+  --border: #cfdcd8;
+  --accent: #0f8f8a;
+  --accent-foreground: #f4fffe;
+  --brand-teal: #0f8f8a;
+  --brand-gold: #e0b84a;
 }
 
 .dark {
-  --background: #09090b;
-  --foreground: #fafafa;
-  --muted: #a1a1aa;
-  --subtle: #18181b;
-  --border: #27272a;
-  --accent: #c4a574;
-  --accent-foreground: #09090b;
+  --background: #050707;
+  --foreground: #eef6f4;
+  --muted: #8aa09b;
+  --subtle: #101616;
+  --border: #1e2a28;
+  --accent: #2dd4bf;
+  --accent-foreground: #04201c;
+  --brand-teal: #2dd4bf;
+  --brand-gold: #f0d078;
 }
 
 @theme inline {
@@ -30,8 +35,11 @@
   --color-border: var(--border);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-brand-teal: var(--brand-teal);
+  --color-brand-gold: var(--brand-gold);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-display);
   --animate-kds-flash: kds-flash 0.85s ease-in-out 4;
 }
 
@@ -54,7 +62,11 @@ html {
 }
 
 body {
-  background: var(--background);
+  background:
+    radial-gradient(ellipse 90% 55% at 50% -10%, color-mix(in oklab, var(--accent) 14%, transparent), transparent 55%),
+    radial-gradient(ellipse 50% 40% at 100% 0%, color-mix(in oklab, var(--brand-teal) 10%, transparent), transparent 50%),
+    var(--background);
+  background-attachment: fixed;
   color: var(--foreground);
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
 }
@@ -65,6 +77,20 @@ html[dir="rtl"] body {
 
 ::selection {
   background: color-mix(in oklab, var(--accent) 28%, transparent);
+}
+
+.brand-gradient-text {
+  background: linear-gradient(135deg, #f0d078 0%, #2dd4bf 48%, #0f8f8a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.dark .brand-gradient-text {
+  background: linear-gradient(135deg, #f7e3a0 0%, #5eead4 45%, #14b8a6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 @media print {
@@ -175,14 +201,14 @@ html[dir="rtl"] body {
 
   .qr-card {
     break-inside: avoid;
-    border-color: #e4e4e7 !important;
+    border-color: #ddd4c6 !important;
     background: #fff !important;
-    color: #0a0a0a !important;
+    color: #12100e !important;
     box-shadow: none !important;
   }
 
   .qr-plate {
-    border-color: #e4e4e7 !important;
+    border-color: #ddd4c6 !important;
     background: #fff !important;
   }
 }

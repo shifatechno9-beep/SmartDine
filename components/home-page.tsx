@@ -46,11 +46,15 @@ export function HomePage() {
 
       <main className="relative z-10">
         <section className="mx-auto max-w-6xl px-6 pt-20 pb-16 sm:pt-28">
+          <div className="mb-8 size-16 sm:size-20">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/brand-mark.png" alt="SavyDine" className="size-full object-contain drop-shadow-[0_0_24px_color-mix(in_oklab,var(--accent)_35%,transparent)]" />
+          </div>
           <p className="font-mono text-[11px] tracking-[0.18em] text-accent">
             {t("landing.kicker")}
           </p>
-          <h1 className="mt-5 max-w-3xl text-4xl leading-[1.08] font-semibold tracking-tight text-balance sm:text-6xl">
-            {t("landing.title")}
+          <h1 className="mt-5 max-w-3xl font-[family-name:var(--font-display)] text-5xl leading-[1.05] font-semibold tracking-tight text-balance sm:text-7xl">
+            <span className="brand-gradient-text">{t("landing.title")}</span>
           </h1>
           <p className="mt-5 max-w-xl text-base leading-7 text-muted text-pretty sm:text-lg">
             {t("landing.body")}
@@ -58,7 +62,7 @@ export function HomePage() {
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Link
               href="/auth/register?plan=pro"
-              className="inline-flex h-10 items-center gap-2 rounded-md bg-foreground px-4 text-sm font-medium text-background"
+              className="inline-flex h-11 items-center gap-2 rounded-md bg-accent px-5 text-sm font-medium text-accent-foreground shadow-[0_0_0_1px_color-mix(in_oklab,var(--accent)_40%,transparent)] hover:brightness-105"
             >
               {t("cta.start")}
               <ArrowRight className="size-4 rtl:rotate-180" />

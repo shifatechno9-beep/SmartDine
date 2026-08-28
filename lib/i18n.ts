@@ -1,4 +1,4 @@
-export type Locale = "ar" | "fr" | "en";
+﻿export type Locale = "ar" | "fr" | "en";
 
 export const LOCALES: {
   code: Locale;
@@ -51,6 +51,7 @@ const en = {
   "nav.preview": "Guest preview",
   "nav.settings": "Settings",
   "nav.qr": "Table QR",
+  "nav.ordersStorage": "Order storage",
   "nav.reviews": "Reviews",
   "nav.logout": "Log out",
   "cta.console": "Open console",
@@ -62,9 +63,9 @@ const en = {
   "cta.login": "Log in",
   "cta.pricing": "See pricing",
   "landing.kicker": "Built for Morocco",
-  "landing.title": "Menus that take the order.",
+  "landing.title": "SavyDine — menus that take the order.",
   "landing.body":
-    "SmartDine is the QR menu, kitchen display, and operator console for restaurants in Morocco — Arabic, French, English, and prices in Moroccan dirhams.",
+    "SavyDine is the QR menu, kitchen display, and operator console for restaurants in Morocco — Arabic, French, English, and prices in Moroccan dirhams.",
   "landing.feature.qr.title": "Guest QR menus",
   "landing.feature.qr.body":
     "Each table opens a branded mobile menu in the guest’s language. Orders land in MAD, with the table already attached.",
@@ -87,7 +88,7 @@ const en = {
   "landing.mock.kds": "Live KDS",
   "landing.mock.tickets": "12 tickets on the pass",
   "landing.mock.kdsBody": "Grill just fired the chicken tagine for table 12.",
-  "landing.bottom.title": "Run tonight on SmartDine.",
+  "landing.bottom.title": "Run tonight on SavyDine.",
   "landing.bottom.body": "Dashboard, guest menu, and kitchen are wired for Morocco.",
   "landing.footer": "Casablanca · Marrakech · Rabat",
   "landing.pricing.kicker": "Plans in MAD",
@@ -110,7 +111,7 @@ const en = {
     "Choose a paid plan to keep the dashboard, kitchen display, and table QR tools for this restaurant.",
   "trial.expiredCta": "See plans",
   "access.suspendedTitle": "This restaurant is suspended",
-  "access.suspendedBody": "Access to the dashboard and kitchen is paused. Contact SmartDine to restore the account.",
+  "access.suspendedBody": "Access to the dashboard and kitchen is paused. Contact SavyDine to restore the account.",
   "access.guestSuspended": "This menu is temporarily unavailable.",
   "super.kicker": "Master console",
   "super.loginTitle": "Super admin access",
@@ -240,6 +241,17 @@ const en = {
   "reviews.count": "{count} reviews",
   "reviews.empty": "No guest ratings yet.",
   "reviews.noComment": "Stars only — no comment.",
+  "orders.storage.heading": "Order storage",
+  "orders.storage.body": "Today's orders with settlement status: paid, cancelled, or changed.",
+  "orders.storage.paid": "Paid",
+  "orders.storage.cancelled": "Cancelled",
+  "orders.storage.changed": "Changed",
+  "orders.storage.unset": "Unset",
+  "orders.storage.filterAll": "All",
+  "orders.storage.empty": "No orders for today yet.",
+  "orders.storage.table": "Table",
+  "orders.storage.schemaMissing":
+    "Run supabase/order_storage_status.sql in the Supabase SQL editor, then reload this page.",
   "kitchen.title": "Kitchen Display System",
   "kitchen.live": "Live",
   "kitchen.soundOn": "Sound on",
@@ -283,7 +295,7 @@ const en = {
   "qr.exportingPdf": "PDF…",
   "qr.exportError": "Could not export the QR cards. Try again, or print from the browser.",
   "qr.waitRestaurant": "Load the restaurant from Supabase before exporting QR codes.",
-  "qr.logoCors": "If the logo is hosted on another domain without CORS, exports will use the SmartDine mark instead.",
+  "qr.logoCors": "If the logo is hosted on another domain without CORS, exports will use the SavyDine mark instead.",
   "lang.label": "Language",
   "theme.light": "Switch to light mode",
   "theme.dark": "Switch to dark mode",
@@ -321,7 +333,7 @@ const en = {
   "pricing.popular": "Most chosen",
   "pricing.cta": "Start with {plan}",
   "pricing.ctaEnterprise": "Talk to us",
-  "pricing.note": "14-day setup included. Cancel before the next invoice.",
+  "pricing.note": "7-day setup included. Cancel before the next invoice.",
   "pricing.footnote": "Prices exclude 20% VAT where applicable. Enterprise is quoted to spec.",
   "pricing.faq.kicker": "Before you sign",
   "pricing.faq.title": "Questions owners actually ask.",
@@ -330,12 +342,12 @@ const en = {
     "Yes. Your menu, slug, and QR codes stay the same. Pro at 399 MAD unlocks unlimited dishes and the live KDS.",
   "pricing.faq.2.q": "Is the guest menu extra?",
   "pricing.faq.2.a":
-    "No. Every plan includes the trilingual QR menu priced in MAD. Guests never see a SmartDine brand on the ticket.",
+    "No. Every plan includes the trilingual QR menu priced in MAD. Guests never see a SavyDine brand on the ticket.",
   "pricing.faq.3.q": "Do you take a cut of each order?",
   "pricing.faq.3.a":
     "No commission. You pay the monthly plan. Orders stay between the table, the kitchen, and you.",
   "register.kicker": "Restaurant onboarding",
-  "register.title": "Open your SmartDine in a few minutes.",
+  "register.title": "Open your SavyDine in a few minutes.",
   "register.body":
     "Name the restaurant, claim a unique menu URL, add a phone number and default language — then we open the dashboard.",
   "register.step.restaurant": "Restaurant",
@@ -349,7 +361,7 @@ const en = {
   "register.slugTaken": "This URL is already taken.",
   "register.slugInvalid": "Use 3–48 characters: letters, numbers, hyphens.",
   "register.slugChecking": "Checking availability…",
-  "register.slugPreview": "smartdine.app/menu/{slug}",
+  "register.slugPreview": "savydine.app/menu/{slug}",
   "register.logo": "Logo",
   "register.logoHint": "PNG, JPG, or WebP. Optional — you can add it later.",
   "register.logoChange": "Replace",
@@ -373,7 +385,7 @@ const en = {
   "register.reviewOwner": "Admin account",
   "register.reviewPhone": "Phone",
   "register.reviewLanguage": "Default language",
-  "register.successTitle": "Your restaurant is on SmartDine.",
+  "register.successTitle": "Your restaurant is on SavyDine.",
   "register.successBody":
     "The owner account is ready. Add dishes, print table QR codes, and open the kitchen display.",
   "register.successConfirm":
@@ -390,7 +402,7 @@ const en = {
   "register.errorRequired": "Restaurant name, a valid menu URL, and a phone number are required.",
   "register.setup":
     "Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY, then run supabase/schema.sql (or supabase/onboarding.sql) before creating a restaurant.",
-  "register.hasAccount": "Already on SmartDine?",
+  "register.hasAccount": "Already on SavyDine?",
   "login.kicker": "Operator access",
   "login.title": "Log back into your restaurant.",
   "login.body":
@@ -423,6 +435,7 @@ const fr: Record<MessageKey, string> = {
   "nav.preview": "Aperçu client",
   "nav.settings": "Réglages",
   "nav.qr": "QR tables",
+  "nav.ordersStorage": "Stockage commandes",
   "nav.reviews": "Avis",
   "nav.logout": "Déconnexion",
   "cta.console": "Ouvrir la console",
@@ -434,9 +447,9 @@ const fr: Record<MessageKey, string> = {
   "cta.login": "Connexion",
   "cta.pricing": "Voir les tarifs",
   "landing.kicker": "Conçu pour le Maroc",
-  "landing.title": "Des menus qui prennent la commande.",
+  "landing.title": "SavyDine — des menus qui prennent la commande.",
   "landing.body":
-    "SmartDine est le menu QR, l’écran cuisine et la console d’exploitation pour les restaurants au Maroc — arabe, français, anglais, et des prix en dirhams.",
+    "SavyDine est le menu QR, l’écran cuisine et la console d’exploitation pour les restaurants au Maroc — arabe, français, anglais, et des prix en dirhams.",
   "landing.feature.qr.title": "Menus QR à table",
   "landing.feature.qr.body":
     "Chaque table ouvre un menu mobile dans la langue du client. Les commandes arrivent en MAD, table déjà liée.",
@@ -459,7 +472,7 @@ const fr: Record<MessageKey, string> = {
   "landing.mock.kds": "KDS en direct",
   "landing.mock.tickets": "12 tickets au passe",
   "landing.mock.kdsBody": "Le grill vient d’envoyer le tajine de poulet pour la table 12.",
-  "landing.bottom.title": "Lancez le service avec SmartDine.",
+  "landing.bottom.title": "Lancez le service avec SavyDine.",
   "landing.bottom.body": "Tableau de bord, menu client et cuisine sont prêts pour le Maroc.",
   "landing.footer": "Casablanca · Marrakech · Rabat",
   "landing.pricing.kicker": "Offres en MAD",
@@ -483,7 +496,7 @@ const fr: Record<MessageKey, string> = {
   "trial.expiredCta": "Voir les tarifs",
   "access.suspendedTitle": "Ce restaurant est suspendu",
   "access.suspendedBody":
-    "Le tableau de bord et la cuisine sont en pause. Contactez SmartDine pour rétablir le compte.",
+    "Le tableau de bord et la cuisine sont en pause. Contactez SavyDine pour rétablir le compte.",
   "access.guestSuspended": "Ce menu est temporairement indisponible.",
   "super.kicker": "Console maître",
   "super.loginTitle": "Accès super admin",
@@ -614,6 +627,17 @@ const fr: Record<MessageKey, string> = {
   "reviews.count": "{count} avis",
   "reviews.empty": "Pas encore d’avis.",
   "reviews.noComment": "Étoiles seulement — sans commentaire.",
+  "orders.storage.heading": "Stockage des commandes",
+  "orders.storage.body": "Commandes du jour avec statut : payée, annulée ou modifiée.",
+  "orders.storage.paid": "Payée",
+  "orders.storage.cancelled": "Annulée",
+  "orders.storage.changed": "Modifiée",
+  "orders.storage.unset": "Non défini",
+  "orders.storage.filterAll": "Toutes",
+  "orders.storage.empty": "Aucune commande aujourd'hui.",
+  "orders.storage.table": "Table",
+  "orders.storage.schemaMissing":
+    "Exécutez supabase/order_storage_status.sql dans l’éditeur SQL Supabase, puis rechargez la page.",
   "kitchen.title": "Écran cuisine",
   "kitchen.live": "En direct",
   "kitchen.soundOn": "Son activé",
@@ -657,7 +681,7 @@ const fr: Record<MessageKey, string> = {
   "qr.exportingPdf": "PDF…",
   "qr.exportError": "Impossible d’exporter les cartes QR. Réessayez, ou imprimez depuis le navigateur.",
   "qr.waitRestaurant": "Chargez le restaurant depuis Supabase avant d’exporter les QR.",
-  "qr.logoCors": "Si le logo est hébergé sur un autre domaine sans CORS, l’export utilisera le monogramme SmartDine.",
+  "qr.logoCors": "Si le logo est hébergé sur un autre domaine sans CORS, l’export utilisera le monogramme SavyDine.",
   "lang.label": "Langue",
   "theme.light": "Passer en mode clair",
   "theme.dark": "Passer en mode sombre",
@@ -695,7 +719,7 @@ const fr: Record<MessageKey, string> = {
   "pricing.popular": "Le plus choisi",
   "pricing.cta": "Commencer avec {plan}",
   "pricing.ctaEnterprise": "Nous écrire",
-  "pricing.note": "Installation de 14 jours incluse. Résiliation avant la prochaine facture.",
+  "pricing.note": "Installation de 7 jours incluse. Résiliation avant la prochaine facture.",
   "pricing.footnote": "Prix hors TVA 20 % le cas échéant. L’Enterprise est chiffré sur cahier des charges.",
   "pricing.faq.kicker": "Avant de signer",
   "pricing.faq.title": "Les questions que posent les exploitants.",
@@ -704,12 +728,12 @@ const fr: Record<MessageKey, string> = {
     "Oui. Menu, slug et QR restent les mêmes. Le Pro à 399 MAD ouvre les plats illimités et le KDS en direct.",
   "pricing.faq.2.q": "Le menu client est-il en plus ?",
   "pricing.faq.2.a":
-    "Non. Chaque offre inclut le menu QR trilingue en MAD. Le client ne voit pas la marque SmartDine sur le ticket.",
+    "Non. Chaque offre inclut le menu QR trilingue en MAD. Le client ne voit pas la marque SavyDine sur le ticket.",
   "pricing.faq.3.q": "Vous prenez une commission sur les commandes ?",
   "pricing.faq.3.a":
     "Aucune. Vous payez l’abonnement. Les commandes restent entre la table, la cuisine et vous.",
   "register.kicker": "Onboarding restaurant",
-  "register.title": "Ouvrez votre SmartDine en quelques minutes.",
+  "register.title": "Ouvrez votre SavyDine en quelques minutes.",
   "register.body":
     "Nommez le restaurant, réservez une URL de menu unique, ajoutez un téléphone et une langue par défaut — puis nous ouvrons le tableau de bord.",
   "register.step.restaurant": "Restaurant",
@@ -723,7 +747,7 @@ const fr: Record<MessageKey, string> = {
   "register.slugTaken": "Cette URL est déjà prise.",
   "register.slugInvalid": "3 à 48 caractères : lettres, chiffres, tirets.",
   "register.slugChecking": "Vérification…",
-  "register.slugPreview": "smartdine.app/menu/{slug}",
+  "register.slugPreview": "savydine.app/menu/{slug}",
   "register.logo": "Logo",
   "register.logoHint": "PNG, JPG ou WebP. Facultatif — vous pourrez l’ajouter plus tard.",
   "register.logoChange": "Remplacer",
@@ -747,7 +771,7 @@ const fr: Record<MessageKey, string> = {
   "register.reviewOwner": "Compte admin",
   "register.reviewPhone": "Téléphone",
   "register.reviewLanguage": "Langue par défaut",
-  "register.successTitle": "Votre restaurant est sur SmartDine.",
+  "register.successTitle": "Votre restaurant est sur SavyDine.",
   "register.successBody":
     "Le compte exploitant est prêt. Ajoutez les plats, imprimez les QR, ouvrez l’écran cuisine.",
   "register.successConfirm":
@@ -764,7 +788,7 @@ const fr: Record<MessageKey, string> = {
   "register.errorRequired": "Le nom du restaurant, une URL de menu valide et un téléphone sont requis.",
   "register.setup":
     "Ajoutez NEXT_PUBLIC_SUPABASE_URL et NEXT_PUBLIC_SUPABASE_ANON_KEY, puis exécutez supabase/schema.sql (ou supabase/onboarding.sql) avant de créer un restaurant.",
-  "register.hasAccount": "Déjà sur SmartDine ?",
+  "register.hasAccount": "Déjà sur SavyDine ?",
   "login.kicker": "Accès exploitant",
   "login.title": "Reconnectez-vous à votre restaurant.",
   "login.body":
@@ -796,6 +820,7 @@ const ar: Record<MessageKey, string> = {
   "nav.preview": "معاينة الزبون",
   "nav.settings": "الإعدادات",
   "nav.qr": "QR الطاولات",
+  "nav.ordersStorage": "تخزين الطلبات",
   "nav.reviews": "التقييمات",
   "nav.logout": "تسجيل الخروج",
   "cta.console": "فتح لوحة التحكم",
@@ -807,9 +832,9 @@ const ar: Record<MessageKey, string> = {
   "cta.login": "تسجيل الدخول",
   "cta.pricing": "عرض الأسعار",
   "landing.kicker": "مصمم للمغرب",
-  "landing.title": "قوائم تستقبل الطلب.",
+  "landing.title": "سافي داين — قوائم تستقبل الطلب.",
   "landing.body":
-    "سمارت داين هي قائمة QR وشاشة المطبخ ولوحة المشغّل للمطاعم في المغرب — بالعربية والفرنسية والإنجليزية، والأسعار بالدرهم المغربي.",
+    "سافي داين هي قائمة QR وشاشة المطبخ ولوحة المشغّل للمطاعم في المغرب — بالعربية والفرنسية والإنجليزية، والأسعار بالدرهم المغربي.",
   "landing.feature.qr.title": "قوائم QR على الطاولة",
   "landing.feature.qr.body":
     "كل طاولة تفتح قائمة على الهاتف بلغة الزبون. الطلبات تصل بالدرهم مع ربط الطاولة مسبقاً.",
@@ -832,7 +857,7 @@ const ar: Record<MessageKey, string> = {
   "landing.mock.kds": "شاشة المطبخ",
   "landing.mock.tickets": "12 تذكرة على الممر",
   "landing.mock.kdsBody": "الشواية أطلقت طاجين الدجاج للطاولة 12.",
-  "landing.bottom.title": "شغّل خدمة الليلة مع سمارت داين.",
+  "landing.bottom.title": "شغّل خدمة الليلة مع سافي داين.",
   "landing.bottom.body": "لوحة التحكم وقائمة الزبون والمطبخ جاهزة للسوق المغربي.",
   "landing.footer": "الدار البيضاء · مراكش · الرباط",
   "landing.pricing.kicker": "خطط بالدرهم",
@@ -855,7 +880,7 @@ const ar: Record<MessageKey, string> = {
     "اختاروا خطة مدفوعة لمتابعة استخدام لوحة التحكم وشاشة المطبخ ورموز QR للطاولات.",
   "trial.expiredCta": "عرض الخطط",
   "access.suspendedTitle": "هذا المطعم معلّق",
-  "access.suspendedBody": "لوحة التحكم والمطبخ متوقفتان. تواصلوا مع سمارت داين لإعادة الحساب.",
+  "access.suspendedBody": "لوحة التحكم والمطبخ متوقفتان. تواصلوا مع سافي داين لإعادة الحساب.",
   "access.guestSuspended": "هذه القائمة غير متاحة مؤقتاً.",
   "super.kicker": "لوحة الإدارة العامة",
   "super.loginTitle": "دخول المشرف العام",
@@ -985,6 +1010,17 @@ const ar: Record<MessageKey, string> = {
   "reviews.count": "{count} تقييمات",
   "reviews.empty": "لا توجد تقييمات بعد.",
   "reviews.noComment": "نجوم فقط — بلا تعليق.",
+  "orders.storage.heading": "تخزين الطلبات",
+  "orders.storage.body": "طلبات اليوم مع الحالة: تم الدفع، إلغاء، أو تغيير.",
+  "orders.storage.paid": "تم الدفع",
+  "orders.storage.cancelled": "إلغاء",
+  "orders.storage.changed": "تغيير",
+  "orders.storage.unset": "بدون حالة",
+  "orders.storage.filterAll": "الكل",
+  "orders.storage.empty": "لا توجد طلبات اليوم بعد.",
+  "orders.storage.table": "طاولة",
+  "orders.storage.schemaMissing":
+    "شغّل supabase/order_storage_status.sql في محرر SQL بـ Supabase ثم أعد تحميل الصفحة.",
   "kitchen.title": "شاشة عرض المطبخ",
   "kitchen.live": "مباشر",
   "kitchen.soundOn": "الصوت مفعّل",
@@ -1028,7 +1064,7 @@ const ar: Record<MessageKey, string> = {
   "qr.exportingPdf": "PDF…",
   "qr.exportError": "تعذر تصدير بطاقات QR. أعيدوا المحاولة أو اطبعوا من المتصفح.",
   "qr.waitRestaurant": "حمّلوا المطعم من Supabase قبل تصدير رموز QR.",
-  "qr.logoCors": "إذا كان الشعار على نطاق آخر بدون CORS، سيستخدم التصدير علامة SmartDine.",
+  "qr.logoCors": "إذا كان الشعار على نطاق آخر بدون CORS، سيستخدم التصدير علامة SavyDine.",
   "lang.label": "اللغة",
   "theme.light": "التبديل إلى الوضع الفاتح",
   "theme.dark": "التبديل إلى الوضع الداكن",
@@ -1066,7 +1102,7 @@ const ar: Record<MessageKey, string> = {
   "pricing.popular": "الأكثر اختياراً",
   "pricing.cta": "ابدأوا مع {plan}",
   "pricing.ctaEnterprise": "تواصلوا معنا",
-  "pricing.note": "تهيئة 14 يوماً مشمولة. إلغاء قبل الفاتورة التالية.",
+  "pricing.note": "تهيئة 7 أيام مشمولة. إلغاء قبل الفاتورة التالية.",
   "pricing.footnote": "الأسعار دون ضريبة 20٪ عند الاقتضاء. خطة Enterprise تُسعَّر حسب المواصفات.",
   "pricing.faq.kicker": "قبل التوقيع",
   "pricing.faq.title": "أسئلة يطرحها أصحاب المطاعم.",
@@ -1075,12 +1111,12 @@ const ar: Record<MessageKey, string> = {
     "نعم. القائمة والرابط ورموز QR تبقى كما هي. Pro بـ 399 درهماً يفتح الأطباق بلا حد وشاشة المطبخ المباشرة.",
   "pricing.faq.2.q": "هل قائمة الزبون إضافة مدفوعة؟",
   "pricing.faq.2.a":
-    "لا. كل خطة تشمل قائمة QR بثلاث لغات بالدرهم. الزبون لا يرى علامة سمارت داين على التذكرة.",
+    "لا. كل خطة تشمل قائمة QR بثلاث لغات بالدرهم. الزبون لا يرى علامة سافي داين على التذكرة.",
   "pricing.faq.3.q": "هل تأخذون عمولة من كل طلب؟",
   "pricing.faq.3.a":
     "لا عمولة. تدفعون الاشتراك الشهري. الطلبات تبقى بين الطاولة والمطبخ وأنتم.",
   "register.kicker": "تهيئة المطعم",
-  "register.title": "افتحوا سمارت داين في دقائق.",
+  "register.title": "افتحوا سافي داين في دقائق.",
   "register.body":
     "سمّوا المطعم، احجزوا رابط قائمة فريداً، أضيفوا هاتفاً ولغة افتراضية — ثم نفتح لوحة التحكم.",
   "register.step.restaurant": "المطعم",
@@ -1094,7 +1130,7 @@ const ar: Record<MessageKey, string> = {
   "register.slugTaken": "هذا الرابط محجوز.",
   "register.slugInvalid": "من 3 إلى 48 حرفاً: أحرف وأرقام وشرطات.",
   "register.slugChecking": "جاري التحقق…",
-  "register.slugPreview": "smartdine.app/menu/{slug}",
+  "register.slugPreview": "savydine.app/menu/{slug}",
   "register.logo": "الشعار",
   "register.logoHint": "PNG أو JPG أو WebP. اختياري — يمكن إضافته لاحقاً.",
   "register.logoChange": "استبدال",
@@ -1118,7 +1154,7 @@ const ar: Record<MessageKey, string> = {
   "register.reviewOwner": "حساب المسؤول",
   "register.reviewPhone": "الهاتف",
   "register.reviewLanguage": "اللغة الافتراضية",
-  "register.successTitle": "مطعمكم على سمارت داين.",
+  "register.successTitle": "مطعمكم على سافي داين.",
   "register.successBody":
     "حساب المشغّل جاهز. أضيفوا الأطباق، اطبعوا QR الطاولات، وافتحوا شاشة المطبخ.",
   "register.successConfirm":
@@ -1135,7 +1171,7 @@ const ar: Record<MessageKey, string> = {
   "register.errorRequired": "اسم المطعم ورابط قائمة صالح ورقم هاتف مطلوبة.",
   "register.setup":
     "أضيفوا NEXT_PUBLIC_SUPABASE_URL و NEXT_PUBLIC_SUPABASE_ANON_KEY ثم نفّذوا supabase/schema.sql (أو supabase/onboarding.sql) قبل إنشاء مطعم.",
-  "register.hasAccount": "لديكم مطعم على سمارت داين؟",
+  "register.hasAccount": "لديكم مطعم على سافي داين؟",
   "login.kicker": "دخول المشغّل",
   "login.title": "عودوا إلى لوحة مطعمكم.",
   "login.body":

@@ -46,7 +46,7 @@ export function QrGenerator() {
   const logoUrl = restaurant?.logo || undefined;
   const ready = Boolean(restaurantSlug);
   const exporting = Boolean(busy);
-  const siteOrigin = origin || "https://smartdine.app";
+  const siteOrigin = origin || "https://savydine.app";
 
   function onCountChange(value: number) {
     const next = Math.min(60, Math.max(1, value || 1));

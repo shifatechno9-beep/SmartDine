@@ -1,4 +1,4 @@
--- SmartDine complete database setup
+-- SavyDine complete database setup
 -- Run this once in the Supabase SQL Editor (Dashboard → SQL → New query).
 -- Safe to re-run: missing columns, policies, and publications are handled.
 --
@@ -16,6 +16,9 @@ do $$
 begin
   if not exists (select 1 from pg_type where typname = 'order_status') then
     create type public.order_status as enum ('pending', 'preparing', 'ready', 'completed');
+  end if;
+  if not exists (select 1 from pg_type where typname = 'order_storage_status') then
+    create type public.order_storage_status as enum ('paid', 'cancelled', 'changed');
   end if;
 end
 $$;
@@ -59,6 +62,7 @@ create table if not exists public.orders (
   table_number text,
   items jsonb not null default '[]'::jsonb,
   status public.order_status not null default 'pending',
+  storage_status public.order_storage_status,
   total_amount numeric(10, 2) not null default 0,
   notes text,
   created_at timestamptz not null default now()
@@ -112,6 +116,7 @@ alter table public.orders add column if not exists items jsonb;
 alter table public.orders add column if not exists status public.order_status;
 alter table public.orders add column if not exists total_amount numeric(10, 2);
 alter table public.orders add column if not exists notes text;
+alter table public.orders add column if not exists storage_status public.order_storage_status;
 alter table public.orders add column if not exists created_at timestamptz;
 
 alter table public.reviews add column if not exists rating smallint;
@@ -729,6 +734,6 @@ $$;
 
 do $$
 begin
-  raise notice 'SmartDine complete_setup.sql finished.';
+  raise notice 'SavyDine complete_setup.sql finished.';
 end
 $$;

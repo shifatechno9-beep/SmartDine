@@ -243,7 +243,7 @@ export function GuestMenu({
               />
             ) : null}
             <div className="min-w-0">
-              <p className="text-[11px] tracking-[0.18em] text-accent uppercase">SmartDine</p>
+              <p className="text-[11px] tracking-[0.18em] text-accent uppercase">SavyDine</p>
               <h1 className="truncate text-xl font-semibold tracking-tight">{restaurantName}</h1>
               <p
                 className={`mt-1 text-sm text-muted transition-shadow ${

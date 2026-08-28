@@ -19,14 +19,14 @@ export function QrTentCard({
       data-qr-card
       className="qr-card flex break-inside-avoid flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white text-zinc-950 shadow-[0_1px_0_rgba(10,10,10,0.04)]"
     >
-      <div className="h-1.5 bg-[#9a7348]" />
+      <div className="h-1.5 bg-[#0f8f8a]" />
       <div className="flex flex-1 flex-col px-6 pt-5 pb-6">
         <header className="flex items-center gap-3">
           <RestaurantMark name={restaurantName} logoUrl={logoUrl} />
           <div className="min-w-0">
             <p className="truncate text-[15px] font-semibold tracking-tight">{restaurantName}</p>
             <p className="font-mono text-[10px] tracking-[0.14em] text-zinc-500 uppercase">
-              SmartDine
+              SavyDine
             </p>
           </div>
         </header>
@@ -83,12 +83,12 @@ function RestaurantMark({ name, logoUrl }: { name: string; logoUrl?: string }) {
   }
 
   return (
-    <span
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src="/brand-mark.png"
+      alt=""
       aria-hidden
-      className="relative flex size-11 shrink-0 items-center justify-center rounded-xl bg-zinc-950"
-    >
-      <span className="size-2.5 rounded-full bg-white" />
-      <span className="absolute inset-[8px] rounded-md border border-white/70" />
-    </span>
+      className="size-11 shrink-0 object-contain"
+    />
   );
 }

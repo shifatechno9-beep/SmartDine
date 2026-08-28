@@ -1,5 +1,6 @@
 import type { Locale } from "@/lib/i18n";
 import type { LocalizedText } from "@/lib/menu";
+import type { OrderStorageStatus } from "@/lib/order-storage";
 
 export type TicketStatus = "new" | "progress" | "ready" | "complete";
 
@@ -20,6 +21,10 @@ export type KitchenTicket = {
   status: TicketStatus;
   createdAt: number;
   locale: Locale;
+};
+
+export type StoredOrder = KitchenTicket & {
+  storageStatus: OrderStorageStatus | null;
 };
 
 export const BOARD_COLUMNS: {

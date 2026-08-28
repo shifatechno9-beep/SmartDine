@@ -14,6 +14,7 @@ const RESERVED_SLUGS = new Set([
   "settings",
   "signup",
   "smartdine",
+  "savydine",
   "support",
   "www",
 ]);

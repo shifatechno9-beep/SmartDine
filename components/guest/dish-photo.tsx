@@ -6,9 +6,9 @@ import { useLocale } from "@/components/locale-provider";
 import type { Dish, DishCategory } from "@/lib/menu";
 
 const palettes: Record<DishCategory, { from: string; to: string; Icon: typeof Soup }> = {
-  starters: { from: "#3a2a1c", to: "#c4a574", Icon: Soup },
-  mains: { from: "#1a1410", to: "#9a7348", Icon: UtensilsCrossed },
-  drinks: { from: "#14221c", to: "#6f8f78", Icon: Coffee },
+  starters: { from: "#1a2a1c", to: "#e0b84a", Icon: Soup },
+  mains: { from: "#0a1414", to: "#0f8f8a", Icon: UtensilsCrossed },
+  drinks: { from: "#0c1c1a", to: "#2dd4bf", Icon: Coffee },
 };
 
 export function DishPhoto({

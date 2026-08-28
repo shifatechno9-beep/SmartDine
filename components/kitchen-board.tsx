@@ -191,9 +191,10 @@ function TicketCard({
             onClick={onPrint}
             aria-label={t("kitchen.print")}
             title={t("kitchen.print")}
-            className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border bg-background text-muted hover:text-foreground print:hidden"
+            className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-lg border-2 border-accent/50 bg-accent/15 px-3 text-sm font-medium text-foreground shadow-sm transition-colors hover:border-accent hover:bg-accent hover:text-accent-foreground print:hidden"
           >
-            <Printer className="size-4" strokeWidth={1.5} />
+            <Printer className="size-5" strokeWidth={2} />
+            <span className="hidden min-[420px]:inline">{t("kitchen.print")}</span>
           </button>
         </div>
       </div>

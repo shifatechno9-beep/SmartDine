@@ -263,7 +263,7 @@ export function RegisterWizard({ initialPlan }: { initialPlan?: string }) {
                 <span className="mb-1 block text-xs font-medium text-muted">{t("register.slug")}</span>
                 <div className="flex overflow-hidden rounded-md border border-border focus-within:border-foreground">
                   <span className="hidden items-center bg-subtle px-3 font-mono text-[11px] text-muted sm:inline-flex">
-                    smartdine.app/menu/
+                    savydine.app/menu/
                   </span>
                   <input
                     dir="ltr"

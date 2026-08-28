@@ -1,5 +1,6 @@
 "use client";
 
+import { BRAND_NAME } from "@/lib/brand";
 import { formatMad } from "@/lib/i18n";
 import { textFor } from "@/lib/menu";
 import { displayOrderId } from "@/lib/mappers";
@@ -36,7 +37,7 @@ export function KitchenPrintReceipt({
     <div className="kitchen-print-receipt" dir="rtl" lang="ar" aria-hidden>
       <div className="kitchen-print-receipt__inner">
         <header className="kitchen-print-receipt__header">
-          <p className="kitchen-print-receipt__brand">{restaurantName || "SmartDine"}</p>
+          <p className="kitchen-print-receipt__brand">{restaurantName || BRAND_NAME}</p>
           <p className="kitchen-print-receipt__meta">
             <span>{LABELS.orderId}</span>
             <span dir="ltr">{displayOrderId(ticket.id)}</span>

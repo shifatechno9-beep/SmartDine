@@ -5,6 +5,7 @@ import { Logo } from "@/components/logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { useLocale } from "@/components/locale-provider";
+import { BRAND_NAME } from "@/lib/brand";
 
 export function MarketingHeader({
   primaryHref = "/auth/register?plan=pro",
@@ -60,7 +61,7 @@ export function MarketingFooter() {
   return (
     <footer className="relative z-10 border-t border-border">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-8 text-xs text-muted">
-        <p>© {new Date().getFullYear()} SmartDine</p>
+        <p>© {new Date().getFullYear()} {BRAND_NAME}</p>
         <p>{t("landing.footer")}</p>
       </div>
     </footer>

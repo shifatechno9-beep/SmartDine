@@ -41,16 +41,19 @@ function roundRect(
   ctx.closePath();
 }
 
-function drawMark(ctx: CanvasRenderingContext2D, x: number, y: number, size: number) {
+async function drawMark(ctx: CanvasRenderingContext2D, x: number, y: number, size: number) {
+  const brand = await loadImage("/brand-mark.png");
+  if (brand) {
+    const pad = Math.round(size * 0.06);
+    ctx.drawImage(brand, x + pad, y + pad, size - pad * 2, size - pad * 2);
+    return;
+  }
+
   roundRect(ctx, x, y, size, size, 22);
   ctx.fillStyle = QR_INK;
   ctx.fill();
-  ctx.strokeStyle = "rgba(255,255,255,0.7)";
-  ctx.lineWidth = 3;
-  roundRect(ctx, x + 16, y + 16, size - 32, size - 32, 12);
-  ctx.stroke();
   ctx.beginPath();
-  ctx.fillStyle = "#ffffff";
+  ctx.fillStyle = QR_BRASS;
   ctx.arc(x + size / 2, y + size / 2, 10, 0, Math.PI * 2);
   ctx.fill();
 }
@@ -97,7 +100,7 @@ export async function renderQrCardCanvas(input: QrCardInput): Promise<HTMLCanvas
     roundRect(ctx, markX, markY, markSize, markSize, 22);
     ctx.stroke();
   } else {
-    drawMark(ctx, markX, markY, markSize);
+    await drawMark(ctx, markX, markY, markSize);
   }
 
   ctx.fillStyle = QR_INK;
@@ -107,7 +110,7 @@ export async function renderQrCardCanvas(input: QrCardInput): Promise<HTMLCanvas
   ctx.fillText(input.restaurantName, markX + markSize + 28, markY + 48, 900);
   ctx.fillStyle = QR_MUTED;
   ctx.font = `500 22px ${sans}, ui-sans-serif, system-ui`;
-  ctx.fillText("SMARTDINE", markX + markSize + 28, markY + 82);
+  ctx.fillText("SAVYDINE", markX + markSize + 28, markY + 82);
 
   ctx.textAlign = "center";
   ctx.fillStyle = QR_INK;

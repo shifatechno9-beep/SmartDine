@@ -1,4 +1,4 @@
--- Additive onboarding schema for existing SmartDine projects.
+-- Additive onboarding schema for existing SavyDine projects.
 -- Safe to re-run. New projects can use schema.sql instead.
 
 alter table public.restaurants
@@ -199,4 +199,15 @@ exception
     raise notice 'restaurant column grants: %', sqlerrm;
 end
 $$;
+
+do $$
+begin
+  if not exists (select 1 from pg_type where typname = 'order_storage_status') then
+    create type public.order_storage_status as enum ('paid', 'cancelled', 'changed');
+  end if;
+end
+$$;
+
+alter table public.orders
+  add column if not exists storage_status public.order_storage_status;
 

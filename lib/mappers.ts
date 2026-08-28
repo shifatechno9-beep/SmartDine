@@ -1,8 +1,9 @@
 import type { Dish, DishCategory, LocalizedText } from "@/lib/menu";
 import type { Json, OrderStatusDb } from "@/lib/database.types";
 import { parseLocale, type Locale } from "@/lib/i18n";
+import { isOrderStorageStatus } from "@/lib/order-storage";
 import { resolveStarterTrialEnd } from "@/lib/trial";
-import type { KitchenTicket, KitchenTicketItem, TicketStatus } from "@/lib/tickets";
+import type { KitchenTicket, KitchenTicketItem, TicketStatus, StoredOrder } from "@/lib/tickets";
 
 export type Restaurant = {
   id: string;
@@ -172,6 +173,26 @@ export function mapOrder(
     status: STATUS_FROM_DB[row.status] ?? "new",
     createdAt: finiteNumber(new Date(row.created_at).getTime(), Date.now()),
     locale: "fr",
+  };
+}
+
+export function mapStoredOrder(
+  row: {
+    id: string;
+    restaurant_id: string;
+    table_number: string | null;
+    items: Json;
+    status: OrderStatusDb;
+    storage_status?: string | null;
+    total_amount: number;
+    notes: string | null;
+    created_at: string;
+  },
+  restaurantSlug: string,
+): StoredOrder {
+  return {
+    ...mapOrder(row, restaurantSlug),
+    storageStatus: isOrderStorageStatus(row.storage_status) ? row.storage_status : null,
   };
 }
 
