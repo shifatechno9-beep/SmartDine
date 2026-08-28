@@ -103,6 +103,8 @@ const en = {
   "trial.minutes": "min",
   "trial.seconds": "sec",
   "trial.upgrade": "Upgrade",
+  "trial.headerLabel": "Free trial",
+  "trial.subscribe": "Subscribe",
   "trial.expiredTitle": "Your free trial has ended",
   "trial.expiredBody":
     "Choose a paid plan to keep the dashboard, kitchen display, and table QR tools for this restaurant.",
@@ -469,6 +471,8 @@ const fr: Record<MessageKey, string> = {
   "trial.minutes": "min",
   "trial.seconds": "s",
   "trial.upgrade": "Passer à Pro",
+  "trial.headerLabel": "Essai gratuit",
+  "trial.subscribe": "S’abonner",
   "trial.expiredTitle": "L’essai gratuit est terminé",
   "trial.expiredBody":
     "Choisissez une offre payante pour conserver le tableau de bord, l’écran cuisine et les QR de table.",
@@ -836,6 +840,8 @@ const ar: Record<MessageKey, string> = {
   "trial.minutes": "دقيقة",
   "trial.seconds": "ثانية",
   "trial.upgrade": "ترقية الخطة",
+  "trial.headerLabel": "تجربة مجانية",
+  "trial.subscribe": "اشتراك",
   "trial.expiredTitle": "انتهت فترة التجربة المجانية",
   "trial.expiredBody":
     "اختاروا خطة مدفوعة لمتابعة استخدام لوحة التحكم وشاشة المطبخ ورموز QR للطاولات.",

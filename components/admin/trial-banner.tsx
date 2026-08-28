@@ -6,6 +6,50 @@ import { useLocale } from "@/components/locale-provider";
 import { useTrial } from "@/components/use-trial";
 import { padUnit, splitDuration } from "@/lib/trial";
 
+export function TrialHeaderAction() {
+  const { t } = useLocale();
+  const { isTrial, expired, remainingMs, suspended } = useTrial();
+
+  if (suspended || !isTrial) {
+    return null;
+  }
+
+  if (expired) {
+    return (
+      <Link
+        href="/pricing"
+        className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-md bg-foreground px-3 text-xs font-medium text-background"
+      >
+        {t("trial.subscribe")}
+        <ArrowRight className="size-3.5 rtl:rotate-180" />
+      </Link>
+    );
+  }
+
+  const parts = splitDuration(remainingMs);
+  const urgent = remainingMs < 24 * 60 * 60 * 1000;
+
+  return (
+    <div
+      className={`flex shrink-0 items-center gap-2 rounded-md border px-2.5 py-1.5 ${
+        urgent ? "border-red-500/30 bg-red-500/10" : "border-accent/30 bg-accent/10"
+      }`}
+      title={t("trial.hint")}
+    >
+      <span className="hidden text-[10px] text-muted sm:inline">{t("trial.headerLabel")}</span>
+      <span className="font-mono text-xs font-medium tabular-nums tracking-tight" dir="ltr">
+        <span className="sm:hidden">
+          {parts.days > 0 ? `${parts.days}d ` : ""}
+          {padUnit(parts.hours)}:{padUnit(parts.minutes)}
+        </span>
+        <span className="hidden sm:inline">
+          {padUnit(parts.days)}:{padUnit(parts.hours)}:{padUnit(parts.minutes)}:{padUnit(parts.seconds)}
+        </span>
+      </span>
+    </div>
+  );
+}
+
 export function TrialBanner() {
   const { t } = useLocale();
   const { isTrial, expired, remainingMs, suspended } = useTrial();

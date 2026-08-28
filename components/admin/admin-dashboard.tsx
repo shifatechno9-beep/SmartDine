@@ -12,7 +12,7 @@ import { StatsOverview } from "@/components/admin/stats-overview";
 import { MenuManager } from "@/components/admin/menu-manager";
 import { QrGenerator } from "@/components/admin/qr-generator";
 import { ReviewsPanel } from "@/components/admin/reviews-panel";
-import { TrialBanner, TrialExpired, RestaurantSuspended } from "@/components/admin/trial-banner";
+import { TrialHeaderAction, TrialExpired, RestaurantSuspended } from "@/components/admin/trial-banner";
 import { useMenu } from "@/components/menu-provider";
 import { useTrial } from "@/components/use-trial";
 import { logoutRestaurant } from "@/lib/auth";
@@ -120,7 +120,8 @@ export function AdminDashboard() {
               {restaurant ? `${restaurant.name} · ${t("dashboard.service")}` : t("dashboard.subtitle")}
             </p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex min-w-0 flex-1 items-center justify-end gap-2">
+            <TrialHeaderAction />
             <LanguageSwitcher compact />
             <ThemeToggle />
             <button
@@ -135,8 +136,6 @@ export function AdminDashboard() {
             </button>
           </div>
         </header>
-
-        <TrialBanner />
 
         <nav className="flex gap-1 overflow-x-auto border-b border-border px-4 py-2 print:hidden md:hidden">
           {tabs.map((item) => (

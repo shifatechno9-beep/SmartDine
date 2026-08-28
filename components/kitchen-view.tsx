@@ -6,7 +6,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { KitchenBoard } from "@/components/kitchen-board";
 import { KitchenSoundToggle } from "@/components/kitchen-sound-toggle";
-import { TrialBanner, TrialExpired, RestaurantSuspended } from "@/components/admin/trial-banner";
+import { TrialHeaderAction, TrialExpired, RestaurantSuspended } from "@/components/admin/trial-banner";
 import { useLocale } from "@/components/locale-provider";
 import { useTrial } from "@/components/use-trial";
 import { isKitchenSoundMuted } from "@/lib/audio";
@@ -30,8 +30,9 @@ export function KitchenView() {
           <span className="hidden h-4 w-px bg-border sm:block" />
           <p className="hidden truncate text-sm text-muted sm:block">{t("kitchen.title")}</p>
         </div>
-        <div className="flex items-center gap-3">
-          <span className="inline-flex items-center gap-2 text-xs text-muted">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <TrialHeaderAction />
+          <span className="hidden items-center gap-2 text-xs text-muted sm:inline-flex">
             <span className="relative flex size-2">
               <span className="absolute inline-flex size-2 animate-ping rounded-full bg-accent opacity-60" />
               <span className="relative inline-flex size-2 rounded-full bg-accent" />
@@ -48,7 +49,6 @@ export function KitchenView() {
           <ThemeToggle />
         </div>
       </header>
-      <TrialBanner />
       {suspended ? (
         <RestaurantSuspended />
       ) : expired ? (
