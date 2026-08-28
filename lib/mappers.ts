@@ -1,6 +1,7 @@
 import type { Dish, DishCategory, LocalizedText } from "@/lib/menu";
 import type { Json, OrderStatusDb } from "@/lib/database.types";
 import { parseLocale, type Locale } from "@/lib/i18n";
+import { resolveStarterTrialEnd } from "@/lib/trial";
 import type { KitchenTicket, KitchenTicketItem, TicketStatus } from "@/lib/tickets";
 
 export type Restaurant = {
@@ -105,6 +106,8 @@ export function mapRestaurant(row: {
   suspended?: boolean | null;
   created_at?: string | null;
 }): Restaurant {
+  const trial = resolveStarterTrialEnd(row);
+
   return {
     id: row.id,
     name: row.name,
@@ -114,8 +117,8 @@ export function mapRestaurant(row: {
     phone: row.phone ?? "",
     defaultLocale: parseLocale(row.default_locale),
     plan: row.plan || "starter",
-    isTrial: Boolean(row.is_trial),
-    trialEndsAt: row.trial_ends_at ?? null,
+    isTrial: trial.isTrial,
+    trialEndsAt: trial.trialEndsAt,
     suspended: Boolean(row.suspended),
     createdAt: row.created_at ?? "",
   };

@@ -10,6 +10,44 @@ export type TrialSnapshot = {
   trialEndsAt: number | null;
 };
 
+export function resolveStarterTrialEnd(
+  row: {
+    plan?: string | null;
+    is_trial?: boolean | null;
+    trial_ends_at?: string | null;
+    created_at?: string | null;
+  },
+  now = Date.now(),
+) {
+  const plan = row.plan || "starter";
+  if (plan !== "starter") {
+    return {
+      isTrial: Boolean(row.is_trial),
+      trialEndsAt: row.trial_ends_at ?? null,
+    };
+  }
+
+  if (row.trial_ends_at) {
+    return {
+      isTrial: row.is_trial !== false,
+      trialEndsAt: row.trial_ends_at,
+    };
+  }
+
+  const created = row.created_at ? Date.parse(row.created_at) : Number.NaN;
+  if (Number.isFinite(created)) {
+    return {
+      isTrial: true,
+      trialEndsAt: new Date(created + STARTER_TRIAL_MS).toISOString(),
+    };
+  }
+
+  return {
+    isTrial: true,
+    trialEndsAt: new Date(now + STARTER_TRIAL_MS).toISOString(),
+  };
+}
+
 export function trialEndsAtIso(plan: PlanId, from = new Date()) {
   if (plan !== "starter") {
     return null;
@@ -36,6 +74,7 @@ export function getTrialSnapshot(
     plan: string;
     isTrial: boolean;
     trialEndsAt: string | null;
+    createdAt?: string | null;
   } | null,
   now = Date.now(),
 ): TrialSnapshot {
@@ -43,9 +82,19 @@ export function getTrialSnapshot(
     return { isTrial: false, expired: false, remainingMs: 0, trialEndsAt: null };
   }
 
-  const ends = restaurant.trialEndsAt ? Date.parse(restaurant.trialEndsAt) : Number.NaN;
+  const resolved = resolveStarterTrialEnd(
+    {
+      plan: restaurant.plan,
+      is_trial: restaurant.isTrial,
+      trial_ends_at: restaurant.trialEndsAt,
+      created_at: restaurant.createdAt,
+    },
+    now,
+  );
+
+  const ends = resolved.trialEndsAt ? Date.parse(resolved.trialEndsAt) : Number.NaN;
   const hasEnd = Number.isFinite(ends);
-  const isTrial = restaurant.isTrial || (restaurant.plan === "starter" && hasEnd);
+  const isTrial = resolved.isTrial && hasEnd;
 
   if (!isTrial || !hasEnd) {
     return { isTrial: false, expired: false, remainingMs: 0, trialEndsAt: hasEnd ? ends : null };
