@@ -5,12 +5,13 @@ import { orderFromPayload, orderItemsToJson, STATUS_TO_DB } from "@/lib/mappers"
 import { getSupabase } from "@/lib/supabase";
 import type { KitchenTicket, KitchenTicketItem, TicketStatus } from "@/lib/tickets";
 
-export type OrdersMode = "all" | "board" | "today" | "none";
+export type OrdersMode = "all" | "board" | "today" | "guest" | "none";
 
 type UseOrdersOptions = {
   onIncoming?: (ticket: KitchenTicket) => void;
   mode?: OrdersMode;
   sinceMs?: number;
+  table?: string;
 };
 
 const ACTIVE_STATUSES = ["pending", "preparing", "ready"] as const;
@@ -23,9 +24,17 @@ function startOfLocalDay(at = Date.now()) {
   return start;
 }
 
-function ticketInScope(ticket: KitchenTicket, mode: OrdersMode, sinceMs?: number) {
+function ticketInScope(
+  ticket: KitchenTicket,
+  mode: OrdersMode,
+  sinceMs?: number,
+  table?: string,
+) {
   if (mode === "none") {
     return false;
+  }
+  if (mode === "guest") {
+    return ticket.status !== "complete" && Boolean(table) && ticket.table === table;
   }
   if (mode === "all") {
     return true;
@@ -46,6 +55,7 @@ export function useOrders(
 ) {
   const mode = options?.mode ?? "all";
   const sinceMs = options?.sinceMs;
+  const table = options?.table?.trim() || undefined;
   const [orders, setOrders] = useState<KitchenTicket[]>([]);
   const [loading, setLoading] = useState(mode !== "none");
   const [error, setError] = useState<string | null>(null);
@@ -74,6 +84,34 @@ export function useOrders(
       (data ?? [])
         .map((row) => orderFromPayload(row, restaurantSlug))
         .filter((ticket): ticket is KitchenTicket => Boolean(ticket));
+
+    if (mode === "guest") {
+      if (!table) {
+        setOrders([]);
+        setError(null);
+        setLoading(false);
+        return;
+      }
+
+      const { data, error: queryError } = await supabase
+        .from("orders")
+        .select(ORDER_COLUMNS)
+        .eq("restaurant_id", restaurantId)
+        .eq("table_number", table)
+        .in("status", [...ACTIVE_STATUSES])
+        .order("created_at", { ascending: false });
+
+      if (queryError) {
+        setError(queryError.message);
+        setLoading(false);
+        return;
+      }
+
+      setOrders(mapRows(data));
+      setError(null);
+      setLoading(false);
+      return;
+    }
 
     if (mode === "board") {
       const since = startOfLocalDay().toISOString();
@@ -126,10 +164,10 @@ export function useOrders(
     setOrders(mapRows(data));
     setError(null);
     setLoading(false);
-  }, [mode, restaurantId, restaurantSlug, sinceMs]);
+  }, [mode, restaurantId, restaurantSlug, sinceMs, table]);
 
   useEffect(() => {
-    if (mode === "none") {
+    if (mode === "none" || (mode === "guest" && !table)) {
       const timer = window.setTimeout(() => setLoading(false), 0);
       return () => window.clearTimeout(timer);
     }
@@ -142,12 +180,12 @@ export function useOrders(
 
   useEffect(() => {
     const supabase = getSupabase();
-    if (!supabase || !restaurantId || mode === "none") {
+    if (!supabase || !restaurantId || mode === "none" || (mode === "guest" && !table)) {
       return;
     }
 
     const channel = supabase
-      .channel(`orders:${restaurantId}:${mode}`)
+      .channel(`orders:${restaurantId}:${mode}${table ? `:${table}` : ""}`)
       .on(
         "postgres_changes",
         {
@@ -174,7 +212,7 @@ export function useOrders(
             return;
           }
 
-          if (!ticketInScope(ticket, mode, sinceMs)) {
+          if (!ticketInScope(ticket, mode, sinceMs, table)) {
             setOrders((current) => current.filter((order) => order.id !== ticket.id));
             return;
           }
@@ -204,7 +242,7 @@ export function useOrders(
     return () => {
       void supabase.removeChannel(channel);
     };
-  }, [mode, refresh, restaurantId, restaurantSlug, sinceMs]);
+  }, [mode, refresh, restaurantId, restaurantSlug, sinceMs, table]);
 
   const setStatus = useCallback(
     async (id: string, status: TicketStatus) => {
@@ -260,22 +298,28 @@ export function useOrders(
         0,
       );
 
-      const { error: insertError } = await supabase.from("orders").insert({
-        restaurant_id: restaurantId,
-        table_number: input.table ?? null,
-        items: orderItemsToJson(input.items),
-        status: "pending",
-        total_amount: total,
-        notes: input.notes || null,
-      });
+      const { data, error: insertError } = await supabase
+        .from("orders")
+        .insert({
+          restaurant_id: restaurantId,
+          table_number: input.table ?? null,
+          items: orderItemsToJson(input.items),
+          status: "pending",
+          total_amount: total,
+          notes: input.notes || null,
+        })
+        .select("id")
+        .single();
 
-      if (insertError) {
-        throw insertError;
+      if (insertError || !data?.id) {
+        throw insertError ?? new Error("insert");
       }
 
       if (mode !== "none") {
         await refresh();
       }
+
+      return data.id;
     },
     [mode, refresh, restaurantId],
   );

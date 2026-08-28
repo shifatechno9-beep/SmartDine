@@ -14,6 +14,7 @@ import { DataStatusBanner } from "@/components/data-status-banner";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { GuestDishCard } from "@/components/guest/guest-dish-card";
+import { OrderTrackStepper } from "@/components/guest/order-track-stepper";
 import { CartSheet } from "@/components/guest/cart-sheet";
 import { FeedbackModal } from "@/components/guest/feedback-modal";
 import { GuestToast } from "@/components/guest/guest-toast";
@@ -35,6 +36,14 @@ export function GuestMenu({
   const { t, locale, setLocale } = useLocale();
   const { restaurant, dishes, loading: menuLoading } = useMenu();
   const { createOrder } = useOrders(restaurant?.id ?? null, restaurantSlug, { mode: "none" });
+  const { orders: tableOrders, refresh: refreshTableOrders } = useOrders(
+    restaurant?.id ?? null,
+    restaurantSlug,
+    {
+      mode: "guest",
+      table,
+    },
+  );
   const [filter, setFilter] = useState<Filter>("all");
   const [quantities, setQuantities] = useState<Record<string, number>>({});
   const [cartOpen, setCartOpen] = useState(false);
@@ -91,6 +100,11 @@ export function GuestMenu({
 
   const itemCount = orderableLines.reduce((sum, line) => sum + line.quantity, 0);
   const total = orderableLines.reduce((sum, line) => sum + line.dish.price * line.quantity, 0);
+
+  const activeTableOrders = useMemo(
+    () => [...tableOrders].sort((a, b) => b.createdAt - a.createdAt),
+    [tableOrders],
+  );
 
   const add = useCallback(
     (dishId: string) => {
@@ -169,6 +183,7 @@ export function GuestMenu({
         items,
         notes: notes.trim(),
       });
+      void refreshTableOrders();
 
       setQuantities({});
       setNotes("");
@@ -257,7 +272,14 @@ export function GuestMenu({
           </div>
         </div>
 
-        <div className="px-4 pb-3">
+        <div className="space-y-3 px-4 pb-3">
+          {activeTableOrders.length > 0 ? (
+            <div className="space-y-2">
+              {activeTableOrders.map((order) => (
+                <OrderTrackStepper key={order.id} ticket={order} />
+              ))}
+            </div>
+          ) : null}
           <button
             type="button"
             onClick={callWaiter}

@@ -1,6 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
+import { LayoutGrid } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LanguageSwitcher } from "@/components/language-switcher";
@@ -55,6 +57,13 @@ export function KitchenView() {
         </div>
         <div className="flex items-center gap-2 sm:gap-3">
           <TrialHeaderAction />
+          <Link
+            href="/admin/dashboard"
+            className="inline-flex h-9 items-center gap-2 rounded-md border border-border px-3 text-sm text-muted hover:bg-subtle hover:text-foreground print:hidden"
+          >
+            <LayoutGrid className="size-4" strokeWidth={1.5} />
+            <span className="hidden sm:inline">{t("nav.dashboard")}</span>
+          </Link>
           <span className="hidden items-center gap-2 text-xs text-muted sm:inline-flex">
             <span className="relative flex size-2">
               <span className="absolute inline-flex size-2 animate-ping rounded-full bg-accent opacity-60" />
