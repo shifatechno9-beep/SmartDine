@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { orderFromPayload, orderItemsToJson, STATUS_TO_DB } from "@/lib/mappers";
 import { getSupabase } from "@/lib/supabase";
 import type { KitchenTicket, KitchenTicketItem, TicketStatus } from "@/lib/tickets";
+import type { OrderStorageStatus } from "@/lib/order-storage";
 
 export type OrdersMode = "all" | "board" | "today" | "guest" | "none";
 
@@ -16,7 +17,7 @@ type UseOrdersOptions = {
 
 const ACTIVE_STATUSES = ["pending", "preparing", "ready"] as const;
 const ORDER_COLUMNS =
-  "id, restaurant_id, table_number, items, status, total_amount, notes, created_at";
+  "id, restaurant_id, table_number, items, status, storage_status, total_amount, notes, created_at";
 
 function startOfLocalDay(at = Date.now()) {
   const start = new Date(at);
@@ -278,6 +279,42 @@ export function useOrders(
     [restaurantId],
   );
 
+  const setStorageStatus = useCallback(
+    async (id: string, storageStatus: OrderStorageStatus) => {
+      const supabase = getSupabase();
+      if (!supabase || !restaurantId) {
+        return;
+      }
+
+      let previous: OrderStorageStatus | null | undefined;
+      setOrders((current) => {
+        previous = current.find((order) => order.id === id)?.storageStatus ?? null;
+        return current.map((order) =>
+          order.id === id ? { ...order, storageStatus } : order,
+        );
+      });
+
+      const { error: updateError } = await supabase
+        .from("orders")
+        .update({ storage_status: storageStatus })
+        .eq("id", id)
+        .eq("restaurant_id", restaurantId);
+
+      if (updateError) {
+        setError(updateError.message);
+        setOrders((current) =>
+          current.map((order) =>
+            order.id === id ? { ...order, storageStatus: previous ?? null } : order,
+          ),
+        );
+        return;
+      }
+
+      setError(null);
+    },
+    [restaurantId],
+  );
+
   const createOrder = useCallback(
     async (input: {
       table?: string;
@@ -324,5 +361,5 @@ export function useOrders(
     [mode, refresh, restaurantId],
   );
 
-  return { orders, loading, error, setStatus, createOrder, refresh };
+  return { orders, loading, error, setStatus, setStorageStatus, createOrder, refresh };
 }
