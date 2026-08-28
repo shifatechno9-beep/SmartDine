@@ -7,12 +7,15 @@ import { LanguageSwitcher } from "@/components/language-switcher";
 import { KitchenBoard } from "@/components/kitchen-board";
 import { KitchenSoundToggle } from "@/components/kitchen-sound-toggle";
 import { TrialHeaderAction, TrialExpired, RestaurantSuspended } from "@/components/admin/trial-banner";
+import { PlanBadge } from "@/components/admin/plan-badge";
 import { useLocale } from "@/components/locale-provider";
+import { useMenu } from "@/components/menu-provider";
 import { useTrial } from "@/components/use-trial";
 import { isKitchenSoundMuted } from "@/lib/audio";
 
 export function KitchenView() {
   const { t } = useLocale();
+  const { restaurant } = useMenu();
   const { expired, suspended } = useTrial();
   const [armed, setArmed] = useState(false);
   const [muted, setMuted] = useState(false);
@@ -28,7 +31,10 @@ export function KitchenView() {
         <div className="flex min-w-0 items-center gap-4">
           <Logo href="/kitchen" />
           <span className="hidden h-4 w-px bg-border sm:block" />
-          <p className="hidden truncate text-sm text-muted sm:block">{t("kitchen.title")}</p>
+          <div className="hidden min-w-0 items-center gap-2 sm:flex">
+            <p className="truncate text-sm text-muted">{t("kitchen.title")}</p>
+            {restaurant ? <PlanBadge plan={restaurant.plan} /> : null}
+          </div>
         </div>
         <div className="flex items-center gap-2 sm:gap-3">
           <TrialHeaderAction />

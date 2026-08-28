@@ -13,6 +13,7 @@ import { MenuManager } from "@/components/admin/menu-manager";
 import { QrGenerator } from "@/components/admin/qr-generator";
 import { ReviewsPanel } from "@/components/admin/reviews-panel";
 import { TrialHeaderAction, TrialExpired, RestaurantSuspended } from "@/components/admin/trial-banner";
+import { PlanBadge } from "@/components/admin/plan-badge";
 import { useMenu } from "@/components/menu-provider";
 import { useTrial } from "@/components/use-trial";
 import { logoutRestaurant } from "@/lib/auth";
@@ -115,7 +116,10 @@ export function AdminDashboard() {
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="flex h-14 items-center justify-between gap-3 border-b border-border px-4 print:hidden sm:px-6">
           <div className="min-w-0">
-            <p className="truncate text-sm font-medium">{t("nav.dashboard")}</p>
+            <div className="flex min-w-0 items-center gap-2">
+              <p className="truncate text-sm font-medium">{t("nav.dashboard")}</p>
+              {restaurant ? <PlanBadge plan={restaurant.plan} /> : null}
+            </div>
             <p className="truncate text-xs text-muted">
               {restaurant ? `${restaurant.name} · ${t("dashboard.service")}` : t("dashboard.subtitle")}
             </p>
