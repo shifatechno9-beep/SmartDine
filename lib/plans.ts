@@ -53,11 +53,11 @@ export function isPlanId(value: string | undefined | null): value is PlanId {
 }
 
 export function parsePlanId(value: string | undefined | null): PlanId {
-  return isPlanId(value) ? value : "pro";
+  return isPlanId(value) ? value : "starter";
 }
 
 export function getPlan(id: PlanId) {
-  return PLANS.find((plan) => plan.id === id) ?? PLANS[1];
+  return PLANS.find((plan) => plan.id === id) ?? PLANS[0];
 }
 
 export function isCustomPlan(plan: Plan) {

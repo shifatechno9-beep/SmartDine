@@ -19,18 +19,32 @@ export function resolveStarterTrialEnd(
   },
   now = Date.now(),
 ) {
-  const plan = row.plan || "starter";
-  if (plan !== "starter") {
-    return {
-      isTrial: Boolean(row.is_trial),
-      trialEndsAt: row.trial_ends_at ?? null,
-    };
-  }
-
   if (row.trial_ends_at) {
     return {
       isTrial: row.is_trial !== false,
       trialEndsAt: row.trial_ends_at,
+    };
+  }
+
+  if (row.is_trial) {
+    const created = row.created_at ? Date.parse(row.created_at) : Number.NaN;
+    if (Number.isFinite(created)) {
+      return {
+        isTrial: true,
+        trialEndsAt: new Date(created + STARTER_TRIAL_MS).toISOString(),
+      };
+    }
+    return {
+      isTrial: true,
+      trialEndsAt: new Date(now + STARTER_TRIAL_MS).toISOString(),
+    };
+  }
+
+  const plan = row.plan || "starter";
+  if (plan !== "starter") {
+    return {
+      isTrial: false,
+      trialEndsAt: null,
     };
   }
 
