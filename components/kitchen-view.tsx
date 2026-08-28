@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Logo } from "@/components/logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { KitchenBoard } from "@/components/kitchen-board";
+import { KitchenPrintReceipt } from "@/components/kitchen-print-receipt";
 import { KitchenSoundToggle } from "@/components/kitchen-sound-toggle";
 import { TrialHeaderAction, TrialExpired, RestaurantSuspended } from "@/components/admin/trial-banner";
 import { PlanBadge } from "@/components/admin/plan-badge";
@@ -12,6 +13,7 @@ import { useLocale } from "@/components/locale-provider";
 import { useMenu } from "@/components/menu-provider";
 import { useTrial } from "@/components/use-trial";
 import { isKitchenSoundMuted } from "@/lib/audio";
+import type { KitchenTicket } from "@/lib/tickets";
 
 export function KitchenView() {
   const { t } = useLocale();
@@ -19,14 +21,29 @@ export function KitchenView() {
   const { expired, suspended } = useTrial();
   const [armed, setArmed] = useState(false);
   const [muted, setMuted] = useState(false);
+  const [printingTicket, setPrintingTicket] = useState<KitchenTicket | null>(null);
 
   useEffect(() => {
     const timer = window.setTimeout(() => setMuted(isKitchenSoundMuted()), 0);
     return () => window.clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    const clearPrint = () => setPrintingTicket(null);
+    window.addEventListener("afterprint", clearPrint);
+    return () => window.removeEventListener("afterprint", clearPrint);
+  }, []);
+
+  const handlePrintTicket = useCallback((ticket: KitchenTicket) => {
+    setPrintingTicket(ticket);
+    window.requestAnimationFrame(() => {
+      window.print();
+    });
+  }, []);
+
   return (
-    <div className="flex min-h-full flex-col">
+    <>
+      <div className="kitchen-screen flex min-h-full flex-col">
       <header className="flex h-14 items-center justify-between gap-3 border-b border-border px-4 sm:px-6">
         <div className="flex min-w-0 items-center gap-4">
           <Logo href="/kitchen" />
@@ -72,9 +89,14 @@ export function KitchenView() {
               />
             </div>
           ) : null}
-          <KitchenBoard />
+          <KitchenBoard onPrintTicket={handlePrintTicket} />
         </>
       )}
-    </div>
+      </div>
+      <KitchenPrintReceipt
+        ticket={printingTicket}
+        restaurantName={restaurant?.name ?? ""}
+      />
+    </>
   );
 }

@@ -74,6 +74,105 @@ html[dir="rtl"] body {
     color: #0a0a0a !important;
   }
 
+  .kitchen-screen {
+    display: none !important;
+  }
+
+  .kitchen-print-receipt {
+    display: block !important;
+    width: 80mm;
+    max-width: 80mm;
+    margin: 0 auto;
+    padding: 0;
+    background: #fff !important;
+    color: #000 !important;
+    font-family: var(--font-arabic), ui-sans-serif, system-ui, sans-serif;
+    font-size: 11px;
+    line-height: 1.45;
+  }
+
+  .kitchen-print-receipt__inner {
+    padding: 3mm 2mm;
+  }
+
+  .kitchen-print-receipt__header {
+    text-align: center;
+  }
+
+  .kitchen-print-receipt__brand {
+    margin: 0 0 2mm;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .kitchen-print-receipt__meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 3mm;
+    margin: 0 0 1mm;
+    font-size: 10px;
+  }
+
+  .kitchen-print-receipt__rule {
+    margin: 2.5mm 0;
+    border-top: 1px dashed #000;
+  }
+
+  .kitchen-print-receipt__items {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .kitchen-print-receipt__item {
+    display: grid;
+    grid-template-columns: 8mm 1fr auto;
+    gap: 1.5mm;
+    align-items: start;
+    margin-bottom: 1.5mm;
+    font-size: 10px;
+  }
+
+  .kitchen-print-receipt__qty {
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-weight: 600;
+  }
+
+  .kitchen-print-receipt__name {
+    font-weight: 500;
+  }
+
+  .kitchen-print-receipt__price {
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    white-space: nowrap;
+  }
+
+  .kitchen-print-receipt__total {
+    display: flex;
+    justify-content: space-between;
+    gap: 3mm;
+    margin: 0;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .kitchen-print-receipt__notes {
+    margin: 0;
+    font-size: 10px;
+    line-height: 1.5;
+  }
+
+  .kitchen-print-receipt__notes-label {
+    display: block;
+    margin-bottom: 1mm;
+    font-weight: 700;
+  }
+
+  @page {
+    size: 80mm auto;
+    margin: 2mm;
+  }
+
   .qr-card {
     break-inside: avoid;
     border-color: #e4e4e7 !important;
@@ -85,5 +184,11 @@ html[dir="rtl"] body {
   .qr-plate {
     border-color: #e4e4e7 !important;
     background: #fff !important;
+  }
+}
+
+@media screen {
+  .kitchen-print-receipt {
+    display: none;
   }
 }

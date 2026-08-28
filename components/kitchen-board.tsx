@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
-import { Check, CirclePlay, CookingPot, StickyNote } from "lucide-react";
+import { Check, CirclePlay, CookingPot, Printer, StickyNote } from "lucide-react";
 import { playKitchenAlert } from "@/lib/audio";
 import { formatMad } from "@/lib/i18n";
 import { useLocale } from "@/components/locale-provider";
@@ -41,7 +41,11 @@ function ageLabel(createdAt: number, now: number) {
   return `${minutes}:${seconds.toString().padStart(2, "0")}`;
 }
 
-export function KitchenBoard() {
+export function KitchenBoard({
+  onPrintTicket,
+}: {
+  onPrintTicket: (ticket: KitchenTicket) => void;
+}) {
   const { t } = useLocale();
   const { restaurant, loading: menuLoading } = useMenu();
   const [freshIds, setFreshIds] = useState<Set<string>>(() => new Set());
@@ -130,6 +134,7 @@ export function KitchenBoard() {
                       now={now}
                       fresh={freshIds.has(ticket.id)}
                       onStatus={(status) => void setStatus(ticket.id, status)}
+                      onPrint={() => onPrintTicket(ticket)}
                     />
                   ))
                 )}
@@ -147,11 +152,13 @@ function TicketCard({
   now,
   fresh,
   onStatus,
+  onPrint,
 }: {
   ticket: KitchenTicket;
   now: number;
   fresh: boolean;
   onStatus: (status: TicketStatus) => void;
+  onPrint: () => void;
 }) {
   const { t, locale } = useLocale();
   const hot = now !== 0 && now - ticket.createdAt > 8 * 60_000;
@@ -175,9 +182,20 @@ function TicketCard({
             </span>
           ) : null}
         </div>
-        <p className={`font-mono text-sm tabular-nums ${hot && !fresh ? "text-red-600 dark:text-red-400" : ""}`}>
-          {ageLabel(ticket.createdAt, now)}
-        </p>
+        <div className="flex items-center gap-1.5">
+          <p className={`font-mono text-sm tabular-nums ${hot && !fresh ? "text-red-600 dark:text-red-400" : ""}`}>
+            {ageLabel(ticket.createdAt, now)}
+          </p>
+          <button
+            type="button"
+            onClick={onPrint}
+            aria-label={t("kitchen.print")}
+            title={t("kitchen.print")}
+            className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border bg-background text-muted hover:text-foreground print:hidden"
+          >
+            <Printer className="size-4" strokeWidth={1.5} />
+          </button>
+        </div>
       </div>
       <p className="mt-2 text-lg font-semibold tracking-tight">
         {ticket.table ? t("kitchen.table", { n: ticket.table }) : t("kitchen.noTable")}
